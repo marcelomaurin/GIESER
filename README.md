@@ -1,7 +1,7 @@
 # Desenvolvimento de projeto geiser-müller
 
 <img src="https://github.com/marcelomaurin/GIESER/blob/main/imgs/fatecrp.JPG">
- FATEC - Ribeirão Preto 
+
 
 ## Objetivo do trabalho
 Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares.
