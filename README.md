@@ -26,6 +26,12 @@ A Portaria Nº 453/98 da Secretaria de Vigilância Sanitária do Ministério da 
 
 Para o público em geral, os valores máximos permitidos de dose efetiva anual são de 1 mSv (milisievert) em condições normais e de 5 mSv em situações de emergência. Os limites para exposição à radiação em instalações médicas também estão estabelecidos na Portaria Nº 453/98, que define valores máximos permitidos para radiações ionizantes em áreas públicas, áreas restritas e áreas controladas de instalações médicas.
 
+### Comparativo Comercial
+Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
+Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
+Monitor de área: O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
+Contador Geiger: O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
+
 ## Visão do projeto
 
 
