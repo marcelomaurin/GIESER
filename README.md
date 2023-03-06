@@ -4,7 +4,8 @@
 FATEC - Ribeirão Preto 
 
 ## Objetivo do trabalho
-Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares
+Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares.
+Este projeto, visa simular produto conceito, aferindo etapas no desenvolvimento de um projeto de equipamento médico hospitalar.
 
 ## Participantes
 - Marcelo Maurin Martins
@@ -78,7 +79,14 @@ Conecta todos os equipamentos, permitindo registrar os valores coletados e obter
 Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem como alarmando possiveis exposições
 
 
+## Etapas do Projeto
 
+### Macro cronograma do projeto
+- Contrução de protótipo simples de validação de conceito
+- Aferição das informações baseado em equipamentos calibrados, garantindo que os dados lidos
+- Construção de demais itens
+- Validações e Testes de projeto
+- Homologação de produto
 
 
 
