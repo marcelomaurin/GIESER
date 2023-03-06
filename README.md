@@ -89,7 +89,7 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 - Homologação de produto
 
 # Documentação técnica
-
+<a href= "https://github.com/marcelomaurin/GIESER/wiki">https://github.com/marcelomaurin/GIESER/wiki</a>
 
 # Status Report de atividades (NEWS)
 05/03/2023 - Montagem de protótipo parcialmente funcional.
