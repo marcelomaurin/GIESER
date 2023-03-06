@@ -45,10 +45,14 @@ Com a adição de um PC, o sensor de mesa pode ser integrado a sistemas de monit
 
 ## Comparativo Comercial
 Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
-Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
-Monitor de área: O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
-Contador Geiger: O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
-
+Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. 
+Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
+### Monitor de área: 
+O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. 
+Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
+### Contador Geiger: 
+O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. 
+Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
 
 ## Partes do Projeto
 Abordaremos a visão das partes do projeto, apresentando o que cada parte faz
