@@ -1,12 +1,39 @@
 # Desenvolvimento de um sensor de mesa geiser-müller
 
 <img src="https://github.com/marcelomaurin/GIESER/blob/main/imgs/fatecrp.JPG">
+FATEC - Ribeirão Preto 
+
+## Objetivo do trabalho
+Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares
 
 ## Participantes
 - Marcelo Maurin Martins
 - Lorena Flores
 - Llayne
 
+## Visão de Negógio
+O monitoramento de ambientes médicos hospitalares, auxilia na profilaxia no trato de doenças.
+Em especial o pessoal de ambientes médicos, devido ao contato continuo com aparelhos que emitem radiação, podem no decorrer de anos, desenvolver patologias especificas de tal exposição.
+O monitoramento dos ambientes, através da medição continua, auxilia aos gestores garantir que a exposição de seus colaboradores, estarão dentro de taxas seguras. Medindo acumuladamente, as taxas em locais e pessoas durante o ciclo de trabalho.
+
+Desta forma o projeto visa monitorar tanto temperatura, humidade e níveis de radiação na faixa de 20mR/h ate 120 mR/h  (200uSv/h - 1200uSv/h)  de raios gama e 100mR/h até 1800 mR/h de raios Beta.
+
+## Visão do projeto
+
+
+## Partes do Projeto
+
+### Leitor Desktop
+Leitor permite conectar diretamente o equipamento a um PC, realizando o monitoramento do ambiente, passando as informações para o PC.
+
+### Leitor Wifi
+Leitor autonomo conecta-se diretamente no wifi da instituição, passando os dados lidos através para o software de Gestão.
+
+### Software de Gestão de Monitoramento
+Conecta todos os equipamentos, permitindo registrar os valores coletados e obter informações estatísticas do ambiente.
+
+### App de Monitoramento
+Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem como alarmando possiveis exposições
 
 
 
