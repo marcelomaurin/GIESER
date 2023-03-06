@@ -43,16 +43,15 @@ Monitoramento de radiação em ambientes de armazenamento e transporte de materi
 
 Com a adição de um PC, o sensor de mesa pode ser integrado a sistemas de monitoramento em tempo real, permitindo que a equipe médica monitore continuamente os níveis de radiação em ambientes de trabalho ou em pacientes, permitindo uma resposta imediata caso haja um aumento nos níveis de radiação. Além disso, o PC pode ser usado para armazenar dados e gerar relatórios para fins de documentação e auditoria.
 
-### Comparativo Comercial
+## Comparativo Comercial
 Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
 Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
 Monitor de área: O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
 Contador Geiger: O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
 
-## Visão do projeto
-Abordaremos a visão das partes do projeto, apresentando o que cada parte faz.
 
-### Partes do Projeto
+## Partes do Projeto
+Abordaremos a visão das partes do projeto, apresentando o que cada parte faz
 
 ### Leitor Desktop
 Leitor permite conectar diretamente o equipamento a um PC, realizando o monitoramento do ambiente, passando as informações para o PC.
