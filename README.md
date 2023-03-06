@@ -26,31 +26,6 @@ A Portaria Nº 453/98 da Secretaria de Vigilância Sanitária do Ministério da 
 
 Para o público em geral, os valores máximos permitidos de dose efetiva anual são de 1 mSv (milisievert) em condições normais e de 5 mSv em situações de emergência. Os limites para exposição à radiação em instalações médicas também estão estabelecidos na Portaria Nº 453/98, que define valores máximos permitidos para radiações ionizantes em áreas públicas, áreas restritas e áreas controladas de instalações médicas.
 
-### Comparativo Comercial
-Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
-Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
-Monitor de área: O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
-Contador Geiger: O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
-
-## Visão do projeto
-
-
-## Partes do Projeto
-
-### Leitor Desktop
-Leitor permite conectar diretamente o equipamento a um PC, realizando o monitoramento do ambiente, passando as informações para o PC.
-
-### Leitor Wifi
-Leitor autonomo conecta-se diretamente no wifi da instituição, passando os dados lidos através para o software de Gestão.
-
-### Software de Gestão de Monitoramento
-Conecta todos os equipamentos, permitindo registrar os valores coletados e obter informações estatísticas do ambiente.
-
-### App de Monitoramento
-Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem como alarmando possiveis exposições
-
-
-
 ## Aplicações
 Monitoramento de radiação em ambientes de tratamento médico, como salas de radioterapia e laboratórios de radiofarmácia.
 
@@ -67,6 +42,33 @@ Monitoramento de radiação em ambientes de produção de radioisótopos e de ra
 Monitoramento de radiação em ambientes de armazenamento e transporte de materiais radioativos para uso médico, para garantir que os regulamentos de segurança sejam seguidos.
 
 Com a adição de um PC, o sensor de mesa pode ser integrado a sistemas de monitoramento em tempo real, permitindo que a equipe médica monitore continuamente os níveis de radiação em ambientes de trabalho ou em pacientes, permitindo uma resposta imediata caso haja um aumento nos níveis de radiação. Além disso, o PC pode ser usado para armazenar dados e gerar relatórios para fins de documentação e auditoria.
+
+### Comparativo Comercial
+Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
+Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
+Monitor de área: O monitor de área é um dispositivo usado para monitorar os níveis de radiação em uma determinada área. Há diversos modelos disponíveis no mercado brasileiro, como o monitor de radiação GQ-320 Plus da GQ Electronics e o monitor de radiação RDS-31 da Thermo Fisher Scientific.
+Contador Geiger: O contador Geiger é um dispositivo portátil usado para medir a quantidade de radiação ionizante presente em uma área específica. Há diversos modelos disponíveis no mercado brasileiro, como o contador Geiger GMC-300E Plus da GQ Electronics e o contador Geiger Inspector Alert da S.E. International.
+
+## Visão do projeto
+Abordaremos a visão das partes do projeto, apresentando o que cada parte faz.
+
+### Partes do Projeto
+
+### Leitor Desktop
+Leitor permite conectar diretamente o equipamento a um PC, realizando o monitoramento do ambiente, passando as informações para o PC.
+
+### Leitor Wifi
+Leitor autonomo conecta-se diretamente no wifi da instituição, passando os dados lidos através para o software de Gestão.
+
+### Software de Gestão de Monitoramento
+Conecta todos os equipamentos, permitindo registrar os valores coletados e obter informações estatísticas do ambiente.
+
+### App de Monitoramento
+Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem como alarmando possiveis exposições
+
+
+
+
 
 
 
