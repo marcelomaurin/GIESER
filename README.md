@@ -26,6 +26,12 @@ A Portaria Nº 453/98 da Secretaria de Vigilância Sanitária do Ministério da 
 
 Para o público em geral, os valores máximos permitidos de dose efetiva anual são de 1 mSv (milisievert) em condições normais e de 5 mSv em situações de emergência. Os limites para exposição à radiação em instalações médicas também estão estabelecidos na Portaria Nº 453/98, que define valores máximos permitidos para radiações ionizantes em áreas públicas, áreas restritas e áreas controladas de instalações médicas.
 
+- Norma CNEN-NN-3.01: Estabelece os requisitos básicos de segurança radiológica para instalações médicas, incluindo requisitos para monitoramento de radiação e proteção radiológica.
+- Norma CNEN-NE-3.05: Estabelece os requisitos para o uso de fontes seladas em instalações médicas, incluindo requisitos para proteção radiológica, segurança física e operação segura das fontes.
+- Norma ABNT NBR 14854: Estabelece os requisitos de segurança para a proteção contra radiações ionizantes em ambientes médicos.
+- Norma ISO 4037: Estabelece os requisitos para os instrumentos de medição de radiação utilizados para monitoramento de radiação em ambientes médicos.
+- Norma IEC 60601-1-3: Estabelece os requisitos de segurança para equipamentos eletromédicos relacionados à proteção contra radiação ionizante.****
+
 ## Aplicações
 Monitoramento de radiação em ambientes de tratamento médico, como salas de radioterapia e laboratórios de radiofarmácia.
 
