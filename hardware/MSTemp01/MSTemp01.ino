@@ -1,8 +1,6 @@
 #include <SimpleDHT.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
-//#include <Adafruit_SSD1306.h>
-//#include <splash.h>
 
 // for DHT11, 
 //      VCC: 5V or 3V
@@ -29,8 +27,9 @@ LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars
 float temperature = 0;
 float humidity = 0;
 byte data[40] = {0};
-static char disp[7];
-char aux[16];
+static char disp[10];
+static char disp2[10];
+
 
 
 void start_Serial()
@@ -51,7 +50,6 @@ void start_Geiser()
 void start_LCD()
 {
   lcd.init();                      // initialize the lcd 
-  lcd.init();
   // Print a message to the LCD.
   lcd.backlight();
 }
@@ -66,13 +64,29 @@ void setup() {
 
 void writeLCD()
 {
+  lcd.clear();
+  char aux[16];
+  memset(aux, 0, sizeof(aux));
+  memset(disp,0,sizeof(disp));
+  memset(disp,0,sizeof(disp2));
   lcd.setCursor(0,0);
-  sprintf(aux,"T:%sC H:%sRH",dtostrf(temperature,5,2,disp),dtostrf(humidity,5,2,disp));
+  
+  sprintf(aux,"T:%sC H:%s",dtostrf(temperature,5,1,disp),dtostrf(humidity,5,1,disp2));
+  Serial.print("Display:");
+  Serial.println(aux);
+  //lcd.printstr("ABCDE");
   lcd.print(aux);
+  memset(aux, 0, sizeof(aux));
+  memset(disp,0,sizeof(disp));
+  memset(disp,0,sizeof(disp2));
   lcd.setCursor(0,1);
-  sprintf(aux,"P:%s Sv:%s",dtostrf(countPerMinute,5,2,disp),dtostrf(usvh,5,2,disp));
+  sprintf(aux,"%suSV/h F:%d",dtostrf(usvh,5,2,disp),countPerMinute);
   lcd.print(aux);
-
+  //lcd.printstr("1234");
+  Serial.print("Display:");
+  Serial.println(aux);
+  
+  
 }
 
 void readGeiser()
@@ -86,7 +100,6 @@ void readGeiser()
     Serial.print(";"); 
     Serial.print("uSv/h=");
     Serial.println(usvh, 4);
-    //writeOledScreenText((String) countPerMinute, (String) usvh); // Todo, verify this
     count = 0;
   }
   
@@ -123,7 +136,7 @@ void loop() {
   readDHT();
   readGeiser();
   writeLCD();
-  // DHT11 sampling rate is 1HZ.
+  // DHT21 sampling rate is 1HZ.
   writeSerial();
   //delay(1500);
 }
