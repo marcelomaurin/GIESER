@@ -20,6 +20,12 @@ Segundo artigo: <a href="https://doi.org/10.9771/cmbio.v14i2.11658">[Medeiros, C
 
 Este projeto visa criar ferramental para monitorar tanto temperatura, humidade e níveis de radiação na faixa de 20mR/h ate 120 mR/h  (200uSv/h - 1200uSv/h)  de raios gama e 100mR/h até 1800 mR/h de raios Beta.
 
+### Normativas
+
+A Portaria Nº 453/98 da Secretaria de Vigilância Sanitária do Ministério da Saúde. Essa portaria estabelece os limites de dose individual anual e dose coletiva anual para os trabalhadores expostos à radiação ionizante. Os valores máximos permitidos de dose individual anual para trabalhadores ocupacionalmente expostos variam de 20 mSv (milisieverts) para partes do corpo que não são críticas (como braços e pernas) a 50 mSv para as partes críticas do corpo (como o olho e o sistema reprodutor). O valor máximo permitido de dose coletiva anual para trabalhadores expostos é de 1 mSv multiplicado pela idade do trabalhador em anos.
+
+Para o público em geral, os valores máximos permitidos de dose efetiva anual são de 1 mSv (milisievert) em condições normais e de 5 mSv em situações de emergência. Os limites para exposição à radiação em instalações médicas também estão estabelecidos na Portaria Nº 453/98, que define valores máximos permitidos para radiações ionizantes em áreas públicas, áreas restritas e áreas controladas de instalações médicas.
+
 ## Visão do projeto
 
 
