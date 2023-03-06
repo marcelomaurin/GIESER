@@ -18,7 +18,7 @@ O monitoramento dos ambientes, através da medição continua, auxilia aos gesto
 
 Segundo artigo: <a href="https://doi.org/10.9771/cmbio.v14i2.11658">[Medeiros, Caroline,Dorow  Patricia F;Brandão, Cristiane P;Ribeiro, Mariana R; Análise do conhecimento sobre radiações ionizantes e qualidade do equipamento de proteção individual em um hospital público]</a> a prática médica do diagnóstico por imagem requer controle de qualidade e proteção radiológica para assegurar segurança dos trabalhadores e usuários ocupacionalmente expostos.
 
-Desta forma o projeto visa monitorar tanto temperatura, humidade e níveis de radiação na faixa de 20mR/h ate 120 mR/h  (200uSv/h - 1200uSv/h)  de raios gama e 100mR/h até 1800 mR/h de raios Beta.
+Este projeto visa criar ferramental para monitorar tanto temperatura, humidade e níveis de radiação na faixa de 20mR/h ate 120 mR/h  (200uSv/h - 1200uSv/h)  de raios gama e 100mR/h até 1800 mR/h de raios Beta.
 
 ## Visão do projeto
 
