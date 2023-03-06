@@ -88,6 +88,13 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 - Validações e Testes de projeto
 - Homologação de produto
 
+# Documentação técnica
+
+
+# Status Report de atividades (NEWS)
+05/03/2023 - Montagem de protótipo parcialmente funcional.
+
+
 
 
 
