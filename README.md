@@ -1,4 +1,4 @@
-# Desenvolvimento de um sensor de mesa geiser-müller
+# Desenvolvimento de projeto geiser-müller
 
 <img src="https://github.com/marcelomaurin/GIESER/blob/main/imgs/fatecrp.JPG">
 FATEC - Ribeirão Preto 
