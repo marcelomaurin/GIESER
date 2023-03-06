@@ -7,6 +7,10 @@ FATEC - Ribeirão Preto
 Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares.
 Este projeto, visa simular produto conceito, aferindo etapas no desenvolvimento de um projeto de equipamento médico hospitalar.
 
+## Prof. Orientador
+Prof. Dr. MARCELO CAETANO OLIVEIRA ALVES - Sistemas Microcontrolados em Equipamentos Médico-Hospitalares 
+Prof. Dr. ALESSANDRO FRAGA FARAH - Projetos de Equipamentos Médico-Hospitalares
+
 ## Participantes
 - Marcelo Maurin Martins
 - Lorena Flores
