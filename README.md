@@ -7,14 +7,16 @@ FATEC - Ribeirão Preto
 Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares.
 Este projeto, visa simular produto conceito, aferindo etapas no desenvolvimento de um projeto de equipamento médico hospitalar.
 
-## Prof. Orientador
+E projeto Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
+
+## Prof. Orientador nas disciplinas
 Prof. Dr. MARCELO CAETANO OLIVEIRA ALVES - Sistemas Microcontrolados em Equipamentos Médico-Hospitalares 
 Prof. Dr. ALESSANDRO FRAGA FARAH - Projetos de Equipamentos Médico-Hospitalares
 
-## Participantes
+## Participantes na disciplina projeto de equipamento médico hospitalar
 - Marcelo Maurin Martins
-- Lorena Flores
-- Llayne
+
+## Participantes na disciplina Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 
 ## Visão de Negógio
 O monitoramento de ambientes médicos hospitalares, auxilia na profilaxia no trato de doenças.
