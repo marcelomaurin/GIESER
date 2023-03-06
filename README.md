@@ -51,6 +51,7 @@ Com a adição de um PC, o sensor de mesa pode ser integrado a sistemas de monit
 
 ## Comparativo Comercial
 Neste tópico abordamos equipamentos equivalentes, ao projeto apresentado.
+
 Dosímetro pessoal: O dosímetro pessoal é um dispositivo portátil usado para medir a exposição individual dos trabalhadores à radiação ionizante. 
 Há diversos modelos disponíveis no mercado brasileiro, como o dosímetro DMC 3000 da Mirion Technologies e o dosímetro EPD-Mk2 da Ludlum Measurements.
 ### Monitor de área: 
