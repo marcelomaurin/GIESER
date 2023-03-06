@@ -1,6 +1,15 @@
 # Desenvolvimento de um sensor de mesa geiser-müller
 
-# Aplicações
+
+## Participantes
+- Marcelo Maurin Martins
+- Lorena Flores
+- Llayne
+
+
+
+
+## Aplicações
 Monitoramento de radiação em ambientes de tratamento médico, como salas de radioterapia e laboratórios de radiofarmácia.
 
 Monitoramento de radiação em pacientes que receberam tratamento com radioisótopos, para garantir a segurança do pessoal médico e da equipe que os atende.
