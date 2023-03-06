@@ -2,6 +2,8 @@
 
 <img src="https://github.com/marcelomaurin/GIESER/blob/main/imgs/fatecrp.JPG">
 
+<img src="https://github.com/marcelomaurin/GIESER/blob/main/imgs/MSTemp01.jpeg">
+
 
 ## Objetivo do trabalho
 Desenvolvimento de projeto prático na disciplina: Projetos de Equipamentos Médico-Hospitalares.
