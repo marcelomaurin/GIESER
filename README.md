@@ -110,6 +110,10 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 07/03/2023 - Calibração do Geiser na USP-RP
 
 
+# Agradecimentos
+## CENTRO DE INSTRUMENTAÇÃO, DOSIMETRIA E RADIOPROTEÇÃO – CIDRA
+Departamento de Física - Faculdade de Filosofia, Ciências e Letras de Ribeirão Preto
+
 
 
 
