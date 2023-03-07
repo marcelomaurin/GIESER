@@ -16,8 +16,8 @@ E projeto Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 - Prof. Dr. ALESSANDRO FRAGA FARAH - Projetos de Equipamentos Médico-Hospitalares
 
 ## Participantes na disciplina projeto de equipamento médico hospitalar
-- Marcelo Maurin Martins
-- Llayne
+- Marcelo Maurin Martins /marcelo.martins34@fatec.sp.gov.br
+- Edllayne Santos / edillayne.santos@fatec.sp.gov.br
 - Lorena Fróes
 
 
