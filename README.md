@@ -106,6 +106,9 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 
 # Status Report de atividades (NEWS)
 05/03/2023 - Montagem de protótipo parcialmente funcional.
+06/03/2023 - Correções do software com relação ao LCD
+07/03/2023 - Calibração do Geiser na USP-RP
+
 
 
 
