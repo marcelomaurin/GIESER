@@ -17,12 +17,13 @@ E projeto Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 
 ## Participantes na disciplina projeto de equipamento médico hospitalar
 - Marcelo Maurin Martins
+- Llayne
+- Lorena Fróes
 
 
 ## Participantes na disciplina Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 - Marcelo Maurin Martins
-- Llayne
-- Lorena Fróes
+
 
 ## Visão de Negógio
 O monitoramento de ambientes médicos hospitalares, auxilia na profilaxia no trato de doenças.
