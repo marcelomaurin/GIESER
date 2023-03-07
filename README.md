@@ -95,9 +95,9 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 ## Etapas do Projeto
 
 ### Macro cronograma do projeto
-- Contrução de protótipo simples de validação de conceito
-- Aferição das informações baseado em equipamentos calibrados, garantindo que os dados lidos
-- Construção de demais itens
+- Contrução de protótipo simples de validação de conceito - CONCLUÍDO
+- Aferição das informações baseado em equipamentos calibrados, garantindo que os dados lidos - CONCLUÍDO
+- Construção de demais itens (Software de Mesa, Protótipo de Leitor IoT, Protótipo de Leitor de Lapela)
 - Validações e Testes de projeto
 - Homologação de produto
 
