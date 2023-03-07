@@ -113,6 +113,7 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 # Agradecimentos
 ## CENTRO DE INSTRUMENTAÇÃO, DOSIMETRIA E RADIOPROTEÇÃO – CIDRA
 Departamento de Física - Faculdade de Filosofia, Ciências e Letras de Ribeirão Preto
+Prof. Dra Patricia Nicolucci
 
 
 
