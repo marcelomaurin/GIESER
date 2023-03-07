@@ -17,6 +17,9 @@ Prof. Dr. ALESSANDRO FRAGA FARAH - Projetos de Equipamentos Médico-Hospitalares
 
 ## Participantes na disciplina projeto de equipamento médico hospitalar
 - Marcelo Maurin Martins
+- Llayne
+- Lorena Fróes
+
 
 ## Participantes na disciplina Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 
