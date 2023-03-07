@@ -30,7 +30,6 @@ type
     IdHTTPServer1: TIdHTTPServer;
     IdSchedulerOfThreadDefault1: TIdSchedulerOfThreadDefault;
     IdServerCompressionIntercept1: TIdServerCompressionIntercept;
-    IdServerIOHandlerSSLOpenSSL1: TIdServerIOHandlerSSLOpenSSL;
     lbVersao: TLabel;
     lbstatus: TLabel;
     LazSerial1: TLazSerial;

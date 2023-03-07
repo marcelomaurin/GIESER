@@ -30,7 +30,6 @@ type
     IdHTTPServer1: TIdHTTPServer;
     IdSchedulerOfThreadDefault1: TIdSchedulerOfThreadDefault;
     IdServerCompressionIntercept1: TIdServerCompressionIntercept;
-    IdServerIOHandlerSSLOpenSSL1: TIdServerIOHandlerSSLOpenSSL;
     lbVersao: TLabel;
     lbstatus: TLabel;
     LazSerial1: TLazSerial;
@@ -309,7 +308,7 @@ begin
     Timer1.Enabled:= not Timer1.Enabled;
     TrayIcon1.Visible:=true;
     TrayIcon1.Hint:='Connected';
-    IdHTTPServer1.defaultport(PortTemp);
+    //IdHTTPServer1.DefaultPort (PortTemp);
     IdHTTPServer1.active := true;
     hide;
   end;
