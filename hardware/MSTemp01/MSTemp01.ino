@@ -7,7 +7,7 @@
 //      GND: GND
 //      DATA: 2
 // Conversion factor - CPM to uSV/h
-#define CONV_FACTOR 0.00812
+#define CONV_FACTOR 0.0793
 
 // Pins
 int pinDHT22 = 4;
