@@ -16,13 +16,13 @@ E projeto Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
 - Prof. Dr. ALESSANDRO FRAGA FARAH - Projetos de Equipamentos Médico-Hospitalares
 
 ## Participantes na disciplina projeto de equipamento médico hospitalar
-- Marcelo Maurin Martins
-- Llayne
-- Lorena Fróes
+- Marcelo Maurin Martins / <a href="mailto:marcelo.martins34@fatec.sp.gov.br?subject=Projeto Geiser">marcelo.martins34@fatec.sp.gov.br</a>
+- Edllayne Santos /<a href="mailto:edillayne.santos@fatec.sp.gov.br?subject=Projeto Geiser"> edillayne.santos@fatec.sp.gov.br</a>
+- Lorena Fróes /<a href="mailto:lorena.alcantara@fatec.sp.gov.br?subject=Projeto Geiser">lorena.alcantara@fatec.sp.gov.br</a>
 
 
 ## Participantes na disciplina Sistemas Microcontrolados em Equipamentos Médico-Hospitalares
-- Marcelo Maurin Martins
+- Marcelo Maurin Martins / <a href="mailto:marcelo.martins34@fatec.sp.gov.br?subject=Projeto Geiser"> marcelo.martins34@fatec.sp.gov.br</a>
 
 
 ## Visão de Negógio
@@ -95,9 +95,9 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 ## Etapas do Projeto
 
 ### Macro cronograma do projeto
-- Contrução de protótipo simples de validação de conceito
-- Aferição das informações baseado em equipamentos calibrados, garantindo que os dados lidos
-- Construção de demais itens
+- Contrução de protótipo simples de validação de conceito - CONCLUÍDO
+- Aferição das informações baseado em equipamentos calibrados, garantindo que os dados lidos - CONCLUÍDO
+- Construção de demais itens (Software de Mesa, Protótipo de Leitor IoT, Protótipo de Leitor de Lapela)
 - Validações e Testes de projeto
 - Homologação de produto
 
@@ -106,6 +106,16 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 
 # Status Report de atividades (NEWS)
 05/03/2023 - Montagem de protótipo parcialmente funcional.
+06/03/2023 - Correções do software com relação ao LCD
+07/03/2023 - Calibração do Geiser na USP-RP
+
+
+# Agradecimentos
+## CENTRO DE INSTRUMENTAÇÃO, DOSIMETRIA E RADIOPROTEÇÃO – CIDRA
+Departamento de Física - Faculdade de Filosofia, Ciências e Letras de Ribeirão Preto<br/>
+Prof. Dra Patricia Nicolucci e equipe <br/>
+Universidade de São Paulo
+
 
 
 
