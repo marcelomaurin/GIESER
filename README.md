@@ -105,9 +105,7 @@ Conecta no software, permitindo ao Gestor o acompanhamento real dos níveis, bem
 <a href= "https://github.com/marcelomaurin/GIESER/wiki">https://github.com/marcelomaurin/GIESER/wiki</a>
 
 # Status Report de atividades (NEWS)
-05/03/2023 - Montagem de protótipo parcialmente funcional.
-06/03/2023 - Correções do software com relação ao LCD
-07/03/2023 - Calibração do Geiser na USP-RP
+<a href="https://github.com/marcelomaurin/GIESER/wiki/Status-Report">Status Report pode ser visto aqui</a>
 
 
 # Agradecimentos
