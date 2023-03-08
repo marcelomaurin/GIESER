@@ -3,7 +3,7 @@ object frmmain: Tfrmmain
   Height = 249
   Top = 217
   Width = 555
-  Caption = 'Servidor de Temperatura'
+  Caption = 'Servidor de Radiação'
   ClientHeight = 249
   ClientWidth = 555
   DesignTimePPI = 120

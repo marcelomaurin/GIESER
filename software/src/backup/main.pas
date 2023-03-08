@@ -224,7 +224,7 @@ begin
      end;
 
 
-     //Se chegar no final e nao tem
+     //Se chegar no final e nao tiver
      pos1:= pos(#13,Lbuffer);
      if(pos1<>0) then
      begin
