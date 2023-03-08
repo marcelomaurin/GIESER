@@ -123,12 +123,16 @@ void writeSerial()
   
   Serial.print("Temperatura:");
   Serial.println((float)temperature); 
+  delay(200);
   Serial.print("Humidade:");
   Serial.println((float)humidity);
+  delay(200);
   Serial.print("CPM:");
   Serial.println( countPerMinute);
+  delay(200);
   Serial.print("uSVH:");
   Serial.println(usvh);
+  delay(200);
 }
 
 void loop() {

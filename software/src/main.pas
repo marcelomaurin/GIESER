@@ -189,6 +189,47 @@ begin
        Application.ProcessMessages;
        LBuffer := '';
      end;
+     pos1:= pos('Humidade:',Lbuffer);
+     //pos2 := Length(Lbuffer);
+     if (pos1<>0)  then
+     begin
+       parte:= copy(LBuffer,pos1+9,length(LBuffer));
+       pos2:= pos(#13,parte);
+       parte := copy(parte,0,pos2-1);
+       frmpeso.Humidade(parte);
+       Application.ProcessMessages;
+       LBuffer := '';
+     end;
+     pos1:= pos('CPM:',Lbuffer);
+     //pos2 := Length(Lbuffer);
+     if (pos1<>0)  then
+     begin
+       parte:= copy(LBuffer,pos1+4,length(LBuffer));
+       pos2:= pos(#13,parte);
+       parte := copy(parte,0,pos2-1);
+       frmpeso.Pulso(parte);
+       Application.ProcessMessages;
+       LBuffer := '';
+     end;
+     pos1:= pos('uSVH:',Lbuffer);
+     //pos2 := Length(Lbuffer);
+     if (pos1<>0)  then
+     begin
+       parte:= copy(LBuffer,pos1+5,length(LBuffer));
+       pos2:= pos(#13,parte);
+       parte := copy(parte,0,pos2-1);
+       frmpeso.Radiacao(parte);
+       Application.ProcessMessages;
+       LBuffer := '';
+     end;
+
+
+     //Se chegar no final e nao tiver
+     pos1:= pos(#13,Lbuffer);
+     if(pos1<>0) then
+     begin
+       LBuffer := '';
+     end;
   end;
 end;
 
