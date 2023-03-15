@@ -18,8 +18,10 @@ type
     cbBaudrate: TComboBox;
     cbDatabits: TRadioGroup;
     edSerialPort: TEdit;
+    edURL: TEdit;
     Label12: TLabel;
     Label13: TLabel;
+    Label14: TLabel;
     rgFlowControl: TRadioGroup;
     rgParity: TRadioGroup;
     rgStopbit: TRadioGroup;
@@ -57,6 +59,7 @@ begin
   FSETMAIN.BAUDRATE := frmSetup.cbBaudrate.ItemIndex;
   FSETMAIN.DATABIT := frmSetup.cbDatabits.ItemIndex;
   FSETMAIN.PARIDADE := frmSetup.rgParity.ItemIndex;
+  FSETMAIN.URL := frmSetup.edURL.text;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   FSETMAIN.STOPBIT := frmSetup.rgStopbit.ItemIndex;
 end;

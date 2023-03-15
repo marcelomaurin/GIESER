@@ -5,7 +5,8 @@ unit peso;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, LedNumber;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  LedNumber, registro, funcoes, setmain;
 
 type
 
@@ -24,6 +25,9 @@ type
     lbPulso: TLEDNumber;
     lbTemperatura: TLEDNumber;
     lbHumidade: TLEDNumber;
+    Timer1: TTimer;
+    procedure FormDestroy(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
 
   public
@@ -31,6 +35,7 @@ type
     procedure Humidade(info : string);
     procedure Radiacao(info : string);
     procedure Pulso(info: string);
+    procedure Registrar();
 
   end;
 
@@ -42,6 +47,26 @@ implementation
 {$R *.lfm}
 
 { TfrmPeso }
+
+procedure TfrmPeso.Timer1Timer(Sender: TObject);
+begin
+  frmRegistrar.FIP:= GetLocalIPAddress;
+  frmRegistrar.FLastDT:= datetimetostr(now);
+  frmRegistrar.FNome:= FSETMAIN.MaqName;
+  frmRegistrar.FLeitor:=FSETMAIN.MaqName;
+  frmRegistrar.FHum:= lbHumidade.Caption;
+  frmRegistrar.FRad:= lbRad.Caption;
+  frmRegistrar.FTemp := lbTemperatura.Caption;
+  frmRegistrar.FPulso:=lbPulso.Caption;
+  frmRegistrar.Registra_log();
+end;
+
+procedure TfrmPeso.FormDestroy(Sender: TObject);
+begin
+   Timer1.Enabled:= false;
+end;
+
+
 
 procedure TfrmPeso.Temperatura(info: string);
 begin
@@ -65,6 +90,11 @@ procedure TfrmPeso.Pulso(info: string);
 begin
   lbPulso.Caption:= info;
   Application.ProcessMessages;
+end;
+
+procedure TfrmPeso.Registrar;
+begin
+   Timer1.Enabled:= true;
 end;
 
 end.

@@ -5,13 +5,62 @@ unit funcoes;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, Sockets,
+  {$IFDEF LINUX}
+    baseunix, unixtype
+  {$ENDIF}
+{$IFDEF WINDOWS}
+   WinSock
+{$ENDIF}
+  ;
 
 Function RetiraInfo(Value : string): string;
 function BuscaChave( lista : TStringList; Ref: String; var posicao:integer): boolean;
 function iif(condicao : boolean; verdade : variant; falso: variant):variant;
+function GetLocalIPAddress: string;
+function GetLocalMachineName: string;
 
 implementation
+
+function GetLocalMachineName: string;
+var
+  HostName: string;
+begin
+  Result := '';
+  SetLength(HostName, 255);
+  // Obtém o nome do host local
+  if GetHostName(PChar(HostName), 255) = 0 then
+  begin
+    Result := HostName;
+  end;
+end;
+
+function GetLocalIPAddress: string;
+var
+  HostInfo: PHostEnt;
+  HostName: string;
+  i: Integer;
+begin
+  Result := '';
+  HostName := '';
+  // Obtém o nome do host local
+  SetLength(HostName, 255);
+  if GetHostName(PChar(HostName), 255) = 0 then
+  begin
+    HostInfo := GetHostByName(PChar(HostName));
+    if HostInfo <> nil then
+    begin
+      i := 0;
+      while HostInfo^.h_addr_list[i] <> nil do
+      begin
+        Result := inet_ntoa(PInAddr(HostInfo^.h_addr_list[i])^);
+        Inc(i);
+      end;
+    end;
+  end;
+end;
+
+
 
 function iif(condicao : boolean; verdade : variant; falso: variant):variant;
 begin

@@ -445,6 +445,7 @@ begin
   frmSetup.rgParity.ItemIndex:= FSETMAIN.PARIDADE;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
+  frmSetup.edURL.text := FSETMAIN.;
   frmSetup.show();
 end;
 

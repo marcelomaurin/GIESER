@@ -47,6 +47,8 @@ type
         FSplash : boolean;
         FTipoImp : integer;
         FModeloImp : integer;
+        FURL : String;
+        FMAQNAME : String;
 
 
         procedure Default();
@@ -72,6 +74,8 @@ type
         procedure SetSplash(value:boolean);
         procedure SetTipoImp(value: integer);
         procedure SetModeloImp(value: integer);
+        procedure SetURL(value: string);
+        procedure SetMaqName(value : string);
 
   public
         procedure SalvaContexto();
@@ -98,6 +102,8 @@ type
         property Splash : boolean read FSplash write SetSplash;
         property TipoImp : integer read FTipoImp write SetTipoImp;
         property ModeloImp : integer read FModeloImp write SetModeloImp;
+        property URL : string read FURL write SetURL;
+        property MaqName : string read FMaqName write SetMaqName;
   end;
 
   var
@@ -216,6 +222,16 @@ begin
   FModeloImp:= value;
 end;
 
+procedure TSetMain.SetURL(value: string);
+begin
+  FURL := value;
+end;
+
+procedure TSetMain.SetMaqName(value: string);
+begin
+  FMAQNAME:= value;
+end;
+
 
 
 //Valores default do codigo
@@ -245,6 +261,8 @@ begin
     FPainel := '192.168.0.108';
     FTipoImp := 0;
     FModeloImp := 0;
+    FURL := '127.0.0.1';
+    FMaqName := GetLocalMachineName;
 end;
 
 procedure TSetMain.CarregaContexto();
@@ -339,6 +357,14 @@ begin
     begin
       FMODELOIMP := strtoint(RetiraInfo(arquivo.Strings[posicao]));
     end;
+    if  BuscaChave(arquivo,'URL:',posicao) then
+    begin
+      FURL := RetiraInfo(arquivo.Strings[posicao]);
+    end;
+    if  BuscaChave(arquivo,'MAQNAME:',posicao) then
+    begin
+      FMAQNAME := RetiraInfo(arquivo.Strings[posicao]);
+    end;
 end;
 
 //Metodo construtor
@@ -399,6 +425,8 @@ begin
   arquivo.Append('SPLASH:'+ booltostr(FSPLASH));
   arquivo.Append('TIPOIMP:'+ inttostr(FTIPOIMP));
   arquivo.Append('MODELOIMP:'+ inttostr(FMODELOIMP));
+  arquivo.Append('URL:'+ FURL);
+  arquivo.Append('MAQNAME:'+ FMAQNAME);
   arquivo.SaveToFile(fpath+filename);
 end;
 

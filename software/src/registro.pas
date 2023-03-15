@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  PopupNotifier, lNetComponents, lNet;
+  PopupNotifier, lNetComponents, lNet,  IdHTTP, IdURI;
 
 type
 
@@ -32,8 +32,19 @@ type
     procedure registrar();
   public
     registrou : boolean;
+    FLeitor : string;
+    FNome : string;
+    FIP : string;
+    FLastDT :string;
+    FStatus : string;
+    FTemp : string;
+    FHum : string;
+    FRad : string;
+    FPulso : String;
+
     INFO : String;
     procedure Identifica();
+    procedure Registra_log();
   end;
 
 var
@@ -124,6 +135,45 @@ begin
 
 
   LTCPComponent1.Connect('maurinsoft.com.br',8082);
+end;
+
+procedure TfrmRegistrar.Registra_log();
+var
+  http: TIdHTTP;
+  uri: TIdURI;
+  url: string;
+  params: TStringList;
+begin
+  // Cria uma instância do objeto TIdHTTP
+  http := TIdHTTP.Create;
+  try
+    // Define o timeout da requisição em 10 segundos
+    http.ReadTimeout := 10000;
+
+    // Define a URL do serviço RESTful
+    uri := TIdURI.Create('http://seusite.com/wordpress/wp-json/geiser/v1/logs');
+    url := uri.URI;
+
+    // Cria uma lista de parâmetros para enviar na requisição
+    params := TStringList.Create;
+    try
+      params.Add('id_leitor=' + FLeitor);
+      params.Add('nome=' + FNome);
+      params.Add('ip=' + FIP);
+      params.Add('lastdt=' + FLastDT);
+      params.Add('status=' + FStatus);
+      params.Add('humidade=' + FHum);
+      params.Add('temperatura=' + FTemp);
+      params.Add('rad=' + FRad);
+      params.Add('pulso=' + FPulso);
+      // Envia a requisição POST para o serviço
+      http.Post(url, params);
+    finally
+      params.Free;
+    end;
+  finally
+    http.Free;
+  end;
 end;
 
 end.

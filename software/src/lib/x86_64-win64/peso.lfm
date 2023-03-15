@@ -7,6 +7,7 @@ object frmPeso: TfrmPeso
   ClientHeight = 367
   ClientWidth = 315
   DesignTimePPI = 120
+  OnDestroy = FormDestroy
   LCLVersion = '2.2.4.0'
   object Label2: TLabel
     Left = 10
@@ -119,5 +120,10 @@ object frmPeso: TfrmPeso
     Font.Height = -30
     ParentColor = False
     ParentFont = False
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 217
+    Top = 120
   end
 end
