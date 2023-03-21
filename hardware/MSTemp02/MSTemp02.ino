@@ -11,7 +11,7 @@
 #define CONV_FACTOR 0.0793
 
 #ifndef STASSID
-#define STASSID "maurin"
+#define STASSID "maurin_lab"
 #define STAPSK "1425361425"
 #endif
 
@@ -134,6 +134,7 @@ void showPageId() {
       Serial.println(pageId);
     }
   }
+  delay(500);
 }
 
 
@@ -153,7 +154,7 @@ void NextionShow(char* info1)
   sprintf(cmd,"page %s%c%c%c",info1,strFF,strFF,strFF);  
   Serial.println(cmd);
   swSerial.print(cmd);  
-  delay(100);  
+  delay(500);  
 }
 
 void NextionFieldText(char *field,char *value)
@@ -162,15 +163,27 @@ void NextionFieldText(char *field,char *value)
   //String cmd;
   char cmd[40];
   memset(cmd,'\0',sizeof(cmd));
-  sprintf(cmd,"%s.txt=\"%s\"%c%c%c",field,value,strFF,strFF,strFF);  
+  sprintf(cmd,"%c%s.txt=\"%s\"%c%c%c",strFF,field,value,strFF,strFF,strFF);  
   //cmd = field+".txt=\""+value+"\""+String(strFF)+String(strFF)+String(strFF);
   Serial.println(cmd); 
-  swSerial.println(cmd);  
+  swSerial.println(cmd); 
+  delay(500); 
 }
 
 void NextionWAITESC()
 {
   
+}
+
+void addRadiationValueToGraph(float radiationValue) {
+  // Substitua "x0" pelo nome do componente Xfloat no Editor Nextion
+  // Substitua "0" pelo número do canal onde você deseja adicionar o valor (geralmente 0 para um único canal)
+  char cmd[40];
+  sprintf(cmd, "x0.addValue(0, %d)", (int)radiationValue);
+  swSerial.print(cmd);
+  swSerial.write(0xFF);
+  swSerial.write(0xFF);
+  swSerial.write(0xFF);
 }
 
 void NextionMensage(String info)
@@ -180,9 +193,10 @@ void NextionMensage(String info)
   delay(100);
   String cmd;
   
-  cmd = "MSGtxt.txt=\""+info+"\""+String(strFF)+String(strFF)+String(strFF);
+  cmd = String(strFF)+"MSGtxt.txt=\""+info+"\""+String(strFF)+String(strFF)+String(strFF);
   Serial.println(cmd);  
   swSerial.print(cmd);
+  delay(500);
 }
 
 void NextionMensageSTOP(String info)
@@ -242,9 +256,16 @@ void writeNextion()
   sprintf(info,"%.2f",usvh);
   //NextionValue(info);
   NextionFieldText("Menu.t0",info);
+  //NomeDoXfloat.addValue(0, usvh);
+  addRadiationValueToGraph(usvh);
   //NextionFieldText("Menu.att",String(WiFi.localIP()).c_str());
+  //NextionFieldText("Menu.att", String(WiFi.localIP()).c_str());
   
   
+}
+
+void clearNextionSerial() {
+  swSerial.print("\n\r");
 }
 
 void loop() {
@@ -253,8 +274,9 @@ void loop() {
   writeSerial();
   readSoftSerial();
   writeNextion();
-  
-  //delay(1500);
+  delay(100);
+  clearNextionSerial();
+  delay(100);
 }
 
 void tick() {
@@ -263,5 +285,5 @@ void tick() {
   count++;
   while(digitalRead(GEIGER_COUNTER_PIN) == 0){
   }
-  attachInterrupt(0, tick, FALLING);
+  attachInterrupt(digitalPinToInterrupt(GEIGER_COUNTER_PIN), tick, FALLING);
 }
