@@ -37,6 +37,16 @@ static char disp2[10];
 SoftwareSerial swSerial(swSerialRX, swSerialTX);
 
 
+void NextionMensage(String info);
+void NextionWAITESC();
+void showPageId();
+void NextionFieldText(char *field,char *value);
+void NextionShow(char* info1);
+void NextionValue(char *info);
+
+
+
+
 void start_SoftSerial()
 {
   // Inicie a comunicação serial por software
@@ -66,6 +76,7 @@ void start_Wifi()
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    NextionFieldText("Menu.att","Conectado!!!");
 }
 
 void start_Geiser()
@@ -97,6 +108,97 @@ void NextionValue(char *info)
   //myNextion.setText("p0.t0", "-1");
   Serial.println(cmd);
 }
+
+/*Captura a pagina em que o nextion esta*/
+void showPageId() {
+  char pageId[10];
+  swSerial.print("sendme\n"); // Enviar o comando "sendme" para solicitar o ID da página atual
+  delay(10);
+  while (swSerial.available() > 0) { // Esperar até que haja dados disponíveis na serial
+    char c = swSerial.read();
+    if (c == 0xFF) { // Verificar se é um byte de início de mensagem
+      int i = 0;
+      while (swSerial.available() > 0 && i < sizeof(pageId) - 1) { // Ler o ID da página até o final da mensagem
+        c = swSerial.read();
+        if (c == 0xFF) { // Verificar se é um byte de início de mensagem (pode ocorrer dentro da mensagem)
+          i = 0;
+        } else if (c == '\n') { // Verificar se é o final da mensagem
+          pageId[i] = '\0'; // Adicionar terminador de string ao final do ID da página
+          break;
+        } else {
+          pageId[i] = c;
+          i++;
+        }
+      }
+      Serial.print("ID da pagina atual: ");
+      Serial.println(pageId);
+    }
+  }
+}
+
+
+void NextionShow(char* info1)
+{
+  char strFF = 0xFF;
+  char cmd[40];
+  char *pos;
+  Serial.print("Info:");
+  Serial.println(info1);
+  pos =strstr(info1,"\n");
+  
+  Serial.print("Info:");
+  Serial.println(info1);
+  memset(cmd,'\0',sizeof(cmd));
+
+  sprintf(cmd,"page %s%c%c%c",info1,strFF,strFF,strFF);  
+  Serial.println(cmd);
+  swSerial.print(cmd);  
+  delay(100);  
+}
+
+void NextionFieldText(char *field,char *value)
+{
+  char strFF = 0xFF;  
+  //String cmd;
+  char cmd[40];
+  memset(cmd,'\0',sizeof(cmd));
+  sprintf(cmd,"%s.txt=\"%s\"%c%c%c",field,value,strFF,strFF,strFF);  
+  //cmd = field+".txt=\""+value+"\""+String(strFF)+String(strFF)+String(strFF);
+  Serial.println(cmd); 
+  swSerial.println(cmd);  
+}
+
+void NextionWAITESC()
+{
+  
+}
+
+void NextionMensage(String info)
+{
+  char strFF = 0xFF;
+  swSerial.print("page MSG"+String(strFF)+String(strFF)+String(strFF));  
+  delay(100);
+  String cmd;
+  
+  cmd = "MSGtxt.txt=\""+info+"\""+String(strFF)+String(strFF)+String(strFF);
+  Serial.println(cmd);  
+  swSerial.print(cmd);
+}
+
+void NextionMensageSTOP(String info)
+{
+  char strFF = 0xFF;
+  swSerial.print("page MSG"+String(strFF)+String(strFF)+String(strFF));  
+  delay(100);
+  String cmd;
+  
+  cmd = "MSGtxt.txt=\""+info+"\" "+String(strFF)+String(strFF)+String(strFF);
+  Serial.println(cmd);  
+  swSerial.print(cmd);
+  NextionWAITESC();
+}
+
+
 
 
 void readGeiser()
@@ -137,8 +239,12 @@ void writeNextion()
 {
   char info[20];
   memset(info,'\0',sizeof(info));
-  sprintf(info,"%f",usvh);
-  NextionValue(info);
+  sprintf(info,"%.2f",usvh);
+  //NextionValue(info);
+  NextionFieldText("Menu.t0",info);
+  //NextionFieldText("Menu.att",String(WiFi.localIP()).c_str());
+  
+  
 }
 
 void loop() {
