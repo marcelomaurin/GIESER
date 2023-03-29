@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Meu Plugin
+ * Plugin Name: Geiser
  * Plugin URI: http://maurinsoft.com.br/geiser
  * Description: Gestão de Contador Geiser
  * Version: 1.0
@@ -34,6 +34,9 @@ function criar_tabelas() {
         nome varchar(50) NOT NULL,
         ip varchar(50) NOT NULL,
         lastdt datetime NOT NULL,
+		usvh float NOT NULL,
+		temp float NOT NULL,
+		hum  float NOT NULL,
         status TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
         PRIMARY KEY (id),
         FOREIGN KEY (id_leitor) REFERENCES $table_name1(id)
@@ -49,6 +52,9 @@ function geiser_registra_log_endpoint( WP_REST_Request $request ) {
 
 // Adiciona a rota do web service para chamar o arquivo ./ws/registra_log.php
 add_action( 'rest_api_init', 'geiser_register_api_routes' );
+add_action( 'rest_api_init', 'registrar_rota2_personalizada');
+
+
 function geiser_register_api_routes() {
     //...
     register_rest_route( 'geiser/v1', '/registra_log', array(
@@ -84,21 +90,55 @@ add_action('rest_api_init', 'registrar_rota_personalizada');
 function registrar_rota_personalizada() {
   register_rest_route('Geiser/v1', '/registro.php', [
     'methods' => 'GET',
+    'callback' => 'geiser_lst_callback',
+  ]);
+}
+
+function geiser_lst_callback(WP_REST_Request $request) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'geiser_logs';
+    $results = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
+
+    return new WP_REST_Response($results, 200);
+}
+
+
+function registrar_rota2_personalizada() {
+  register_rest_route('Geiser/v1', '/registro.php', [
+    'methods' => 'POST',
     'callback' => 'geiser_reg_callback',
   ]);
 }
 
-
 function geiser_reg_callback(WP_REST_Request $request) {
-  // Sua lógica de web service aqui
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'geiser_logs';
 
-  // Exemplo: retornar um JSON com uma mensagem de boas-vindas
-  $resposta = [
-    'mensagem' => 'Bem-vindo ao meu web service personalizado!'
-  ];
+    // Obtenha os parâmetros do corpo da solicitação POST
+    $id_leitor = $request->get_param('id_leitor');
+    $nome = $request->get_param('nome');
+    $ip = $request->get_param('ip');
+    $lastdt = $request->get_param('lastdt');
+    $status = $request->get_param('status');
 
-  return new WP_REST_Response($resposta, 200);
+    // Insira os dados na tabela geiser_logs
+    $data = array(
+        'id_leitor' => $id_leitor,
+        'nome' => $nome,
+        'ip' => $ip,
+        'lastdt' => $lastdt,
+        'status' => $status
+    );
+    $wpdb->insert($table_name, $data);
+
+    // Retorne uma resposta JSON confirmando o sucesso da operação
+    $resposta = [
+        'mensagem' => 'Dados inseridos na tabela com sucesso.'
+    ];
+    return new WP_REST_Response($resposta, 200);
 }
+
+
 
 function geiser_admin_page()
 {
