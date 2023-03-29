@@ -1,7 +1,8 @@
-#include <ESP8266WiFi.h>
+#include <SimpleDHT.h>
 #include <Wire.h> 
-#include <SoftwareSerial.h>
-
+#include <LiquidCrystal_I2C.h>
+#include <SPI.h>
+#include <Ethernet.h>
 
 // for DHT11, 
 //      VCC: 5V or 3V
@@ -10,210 +11,139 @@
 // Conversion factor - CPM to uSV/h
 #define CONV_FACTOR 0.0793
 
-#ifndef STASSID
-#define STASSID "maurin_lab"
-#define STAPSK "1425361425"
-#endif
+// Pins
+int pinDHT22 = 4;
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
-
-const int GEIGER_COUNTER_PIN = D3; /*Login pin esp8266*/
-// Defina os pinos RX e TX para a conexão serial por software
-const byte swSerialRX = D5; // GPIO 14
-const byte swSerialTX = D6; // GPIO 12
+const int GEIGER_COUNTER_PIN = 3;
 
 // Variables
 long count = 0;
 long countPerMinute = 0;
-float usvh = 1.0;
+float usvh = 0.0;
 long timePreviousMeassure = 0;
 
+SimpleDHT22 dht22(pinDHT22);
+
+LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+float temperature = 0;
+float humidity = 0;
 byte data[40] = {0};
 static char disp[10];
 static char disp2[10];
 
-// Crie uma instância da conexão serial por software
-SoftwareSerial swSerial(swSerialRX, swSerialTX);
+// Enter a MAC address for your controller below.
+// Newer Ethernet shields have a MAC address printed on a sticker on the shield
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
+// if you don't want to use DNS (and reduce your sketch size)
+// use the numeric IP instead of the name for the server:
+//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
+char server[] = "maurinsoft.com.br";    // name address for Google (using DNS)
 
-void NextionMensage(String info);
-void NextionWAITESC();
-void showPageId();
-void NextionFieldText(char *field,char *value);
-void NextionShow(char* info1);
-void NextionValue(char *info);
+// Set the static IP address to use if the DHCP fails to assign
+IPAddress ip(192, 168, 0, 177);
+IPAddress myDns(192, 168, 0, 1);
 
+// Initialize the Ethernet client library
+// with the IP address and port of the server
+// that you want to connect to (port 80 is default for HTTP):
+EthernetClient client;
 
-
-
-void start_SoftSerial()
-{
-  // Inicie a comunicação serial por software
-  swSerial.begin(9600);
-
-}
+// Variables to measure the speed
+unsigned long beginMicros, endMicros;
+unsigned long byteCount = 0;
+bool printWebData = true;  // set to false for better speed measurement
 
 void start_Serial()
 {
   Serial.begin(115200);
 }
 
-void start_Wifi()
-{
-   /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
-     would try to act as both a client and an access-point and could cause
-     network-issues with your other WiFi-devices on your WiFi-network. */
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.print(".");
-    }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-    NextionFieldText("Menu.att","Conectado!!!");
-}
-
 void start_Geiser()
-{  
+{
+  
   // Init pins
-  //pinMode(GEIGER_COUNTER_PIN, INPUT);
-   //pinMode(interruptPin, INPUT_PULLUP);
-  pinMode(GEIGER_COUNTER_PIN, INPUT_PULLUP);
-  //attachInterrupt(digitalPinToInterrupt(GEIGER_COUNTER_PIN), tick, FALLING); //define external interrupts
-  attachInterrupt(digitalPinToInterrupt(GEIGER_COUNTER_PIN), tick, CHANGE); //define external interrupts
-  Serial.println("Init arduino geiger counter");  
+  pinMode(GEIGER_COUNTER_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(GEIGER_COUNTER_PIN), tick, FALLING); //define external interrupts
+  Serial.println("Init arduino geiger counter");
+  
 }
 
+void start_Ethernet()
+{
+  // start the Ethernet connection:
+  Serial.println("Initialize Ethernet with DHCP:");
+  if (Ethernet.begin(mac) == 0) {
+    Serial.println("Failed to configure Ethernet using DHCP");
+    // Check for Ethernet hardware present
+    if (Ethernet.hardwareStatus() == EthernetNoHardware) {
+      Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
+      while (true) {
+        delay(1); // do nothing, no point running without Ethernet hardware
+      }
+    }
+    if (Ethernet.linkStatus() == LinkOFF) {
+      Serial.println("Ethernet cable is not connected.");
+    }
+    // try to configure using IP address instead of DHCP:
+    Ethernet.begin(mac, ip, myDns);
+  } else {
+    Serial.print("  DHCP assigned IP ");
+    Serial.println(Ethernet.localIP());
+    lcd.setCursor(0,1);
+    lcd.print(Ethernet.localIP());
+    delay(2000);
+  }
+ 
+}
+
+void start_LCD()
+{
+  lcd.init();                      // initialize the lcd 
+  // Print a message to the LCD.
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Cont Gaiser");
+  lcd.setCursor(0,1);
+  lcd.print("Buscando Rede...");
+  start_Ethernet();
+}
 
 void setup() {
   start_Serial();
-  start_SoftSerial();
-  start_Wifi();
-  //start_Geiser();
-}
-
-//Escreve no nextion
-void NextionValue(char *info)
-{
-  char cmd[80];
-  memset(cmd,'\0',sizeof(cmd));
-  sprintf(cmd,"Menu.t0.txt='%s'%c%c%c",info, 0xFF, 0xFF, 0xFF );
-  swSerial.print(cmd);
-  //myNextion.setText("p0.t0", "-1");
-  Serial.println(cmd);
-}
-
-/*Captura a pagina em que o nextion esta*/
-void showPageId() {
-  char pageId[10];
-  swSerial.print("sendme\n"); // Enviar o comando "sendme" para solicitar o ID da página atual
-  delay(10);
-  while (swSerial.available() > 0) { // Esperar até que haja dados disponíveis na serial
-    char c = swSerial.read();
-    if (c == 0xFF) { // Verificar se é um byte de início de mensagem
-      int i = 0;
-      while (swSerial.available() > 0 && i < sizeof(pageId) - 1) { // Ler o ID da página até o final da mensagem
-        c = swSerial.read();
-        if (c == 0xFF) { // Verificar se é um byte de início de mensagem (pode ocorrer dentro da mensagem)
-          i = 0;
-        } else if (c == '\n') { // Verificar se é o final da mensagem
-          pageId[i] = '\0'; // Adicionar terminador de string ao final do ID da página
-          break;
-        } else {
-          pageId[i] = c;
-          i++;
-        }
-      }
-      Serial.print("ID da pagina atual: ");
-      Serial.println(pageId);
-    }
-  }
-  delay(500);
-}
-
-
-void NextionShow(char* info1)
-{
-  char strFF = 0xFF;
-  char cmd[40];
-  char *pos;
-  Serial.print("Info:");
-  Serial.println(info1);
-  pos =strstr(info1,"\n");
   
-  Serial.print("Info:");
-  Serial.println(info1);
-  memset(cmd,'\0',sizeof(cmd));
-
-  sprintf(cmd,"page %s%c%c%c",info1,strFF,strFF,strFF);  
-  Serial.println(cmd);
-  swSerial.print(cmd);  
-  delay(500);  
-}
-
-void NextionFieldText(char *field,char *value)
-{
-  char strFF = 0xFF;  
-  //String cmd;
-  char cmd[40];
-  memset(cmd,'\0',sizeof(cmd));
-  sprintf(cmd,"%c%s.txt=\"%s\"%c%c%c",strFF,field,value,strFF,strFF,strFF);  
-  //cmd = field+".txt=\""+value+"\""+String(strFF)+String(strFF)+String(strFF);
-  Serial.println(cmd); 
-  swSerial.println(cmd); 
-  delay(500); 
-}
-
-void NextionWAITESC()
-{
+  start_LCD();
+  start_Geiser();
   
 }
 
-void addRadiationValueToGraph(float radiationValue) {
-  // Substitua "x0" pelo nome do componente Xfloat no Editor Nextion
-  // Substitua "0" pelo número do canal onde você deseja adicionar o valor (geralmente 0 para um único canal)
-  char cmd[40];
-  sprintf(cmd, "x0.addValue(0, %d)", (int)radiationValue);
-  swSerial.print(cmd);
-  swSerial.write(0xFF);
-  swSerial.write(0xFF);
-  swSerial.write(0xFF);
-}
-
-void NextionMensage(String info)
+void writeLCD()
 {
-  char strFF = 0xFF;
-  swSerial.print("page MSG"+String(strFF)+String(strFF)+String(strFF));  
-  delay(100);
-  String cmd;
+  lcd.clear();
+  char aux[16];
+  memset(aux, 0, sizeof(aux));
+  memset(disp,0,sizeof(disp));
+  memset(disp,0,sizeof(disp2));
+  lcd.setCursor(0,0);
+  lcd.print(Ethernet.localIP());
+  //sprintf(aux,"T:%sC H:%s",dtostrf(temperature,5,1,disp),dtostrf(humidity,5,1,disp2));
+  //Serial.print("Display:");
+  //Serial.println(aux);
+  //lcd.printstr("ABCDE");
+  //lcd.print(aux);
+  memset(aux, 0, sizeof(aux));
+  memset(disp,0,sizeof(disp));
+  memset(disp,0,sizeof(disp2));
+  lcd.setCursor(0,1);
+  sprintf(aux,"%suSV/h F:%d",dtostrf(usvh,5,2,disp),countPerMinute);
+  lcd.print(aux);
+  //lcd.printstr("1234");
+  Serial.print("Display:");
+  Serial.println(aux);
   
-  cmd = String(strFF)+"MSGtxt.txt=\""+info+"\""+String(strFF)+String(strFF)+String(strFF);
-  Serial.println(cmd);  
-  swSerial.print(cmd);
-  delay(500);
-}
-
-void NextionMensageSTOP(String info)
-{
-  char strFF = 0xFF;
-  swSerial.print("page MSG"+String(strFF)+String(strFF)+String(strFF));  
-  delay(100);
-  String cmd;
   
-  cmd = "MSGtxt.txt=\""+info+"\" "+String(strFF)+String(strFF)+String(strFF);
-  Serial.println(cmd);  
-  swSerial.print(cmd);
-  NextionWAITESC();
 }
-
-
-
 
 void readGeiser()
 {  
@@ -228,19 +158,55 @@ void readGeiser()
     Serial.println(usvh, 4);
     count = 0;
   }
+  
+  
 }
 
-void readSoftSerial()
+void WriteSite()
 {
-  // Leia os dados da conexão serial por software e envie para a conexão serial por hardware
-  if (swSerial.available()) {
-    char receivedChar = swSerial.read();
-    Serial.print(receivedChar);
+   // give the Ethernet shield a second to initialize:
+  delay(1000);
+  Serial.print("connecting to ");
+  Serial.print(server);
+  Serial.println("...");
+
+  // if you get a connection, report back via serial:
+  if (client.connect(server, 8082)) {
+    Serial.print("connected to ");
+    Serial.println(client.remoteIP());
+    // Make a HTTP request:
+    client.println("GET /search?q=arduino HTTP/1.1");
+    client.println("Host: maurinsoft.com.br");
+    client.println("Connection: close");
+    client.println();
+  } else {
+    // if you didn't get a connection to the server:
+    Serial.println("connection failed");
+  }
+  beginMicros = micros();
+}
+
+void readDHT()
+{ 
+  // read with raw sample data.
+  
+   int err = SimpleDHTErrSuccess;
+  if ((err = dht22.read2(&temperature, &humidity, NULL)) != SimpleDHTErrSuccess) {
+    Serial.print("Read DHT22 failed, err="); Serial.println(err);delay(2000);
+    return;
   }
 }
 
+
 void writeSerial()
-{  
+{
+  
+  Serial.print("Temperatura:");
+  Serial.println((float)temperature); 
+  delay(200);
+  Serial.print("Humidade:");
+  Serial.println((float)humidity);
+  delay(200);
   Serial.print("CPM:");
   Serial.println( countPerMinute);
   delay(200);
@@ -249,34 +215,14 @@ void writeSerial()
   delay(200);
 }
 
-void writeNextion()
-{
-  char info[20];
-  memset(info,'\0',sizeof(info));
-  sprintf(info,"%.2f",usvh);
-  //NextionValue(info);
-  NextionFieldText("Menu.t0",info);
-  //NomeDoXfloat.addValue(0, usvh);
-  addRadiationValueToGraph(usvh);
-  //NextionFieldText("Menu.att",String(WiFi.localIP()).c_str());
-  //NextionFieldText("Menu.att", String(WiFi.localIP()).c_str());
-  
-  
-}
-
-void clearNextionSerial() {
-  swSerial.print("\n\r");
-}
-
 void loop() {
   // start working...
-  //readGeiser();
+  readDHT();
+  readGeiser();
+  writeLCD();
+  // DHT21 sampling rate is 1HZ.
   writeSerial();
-  readSoftSerial();
-  writeNextion();
-  delay(100);
-  clearNextionSerial();
-  delay(100);
+  //delay(1500);
 }
 
 void tick() {
@@ -285,5 +231,5 @@ void tick() {
   count++;
   while(digitalRead(GEIGER_COUNTER_PIN) == 0){
   }
-  attachInterrupt(digitalPinToInterrupt(GEIGER_COUNTER_PIN), tick, FALLING);
+  attachInterrupt(0, tick, FALLING);
 }
