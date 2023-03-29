@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Meu Plugin
- * Plugin URI: https://meusite.com/meu-plugin
- * Description: Descrição do meu plugin.
+ * Plugin URI: http://maurinsoft.com.br/geiser
+ * Description: Gestão de Contador Geiser
  * Version: 1.0
- * Author: Meu Nome
+ * Author: Marcelo Maurin Martins
  * Author URI: https://meusite.com
  */
 
@@ -61,34 +61,43 @@ function geiser_register_api_routes() {
 }
 
 // Endpoint do web service para chamar o arquivo ./ws/registra_log.php
+/*
 function geiser_registra_log_endpoint( WP_REST_Request $request ) {
     // Inclui o arquivo ./ws/registra_log.php
     require_once( dirname( __FILE__ ) . '/ws/registra_log.php' );
 }
-
+*/
 
 
 
 // Adiciona o menu no painel de administração
 add_action( 'admin_menu', 'geiser_admin_menu' );
 function geiser_admin_menu() {
-    add_menu_page( 'Geiser Admin', 'Geiser Admin', 'manage_options', 'geiser-admin', 'geiser_admin_page', 'dashicons-chart-pie' );
-    add_submenu_page( 'geiser-admin', 'Dispositivos', 'Dispositivos', 'manage_options', 'geiser-dispositivos', 'geiser_dispositivos_page' );
-    add_submenu_page( 'geiser-admin', 'Logs', 'Logs', 'manage_options', 'geiser-logs', 'geiser_logs_page' );
-    add_submenu_page( 'geiser-admin', 'Análise', 'Análise', 'manage_options', 'geiser-analise', 'geiser_analise_page' );
+    add_menu_page( 'Geiser Admin', 'Geiser Admin', 'manage_options', 'geiser-admin', 'geiser_admin_page', 'geiser_admin_page' );
+    add_submenu_page( 'geiser-admin', 'Dispositivos', 'Dispositivos', 'manage_options', 'geiser_dispositivos_page', 'geiser_dispositivos_page' );
+    add_submenu_page( 'geiser-admin', 'Logs', 'Logs', 'manage_options', 'geiser_logs_page', 'geiser_logs_page' );
+    add_submenu_page( 'geiser-admin', 'Análise', 'Análise', 'manage_options', 'geiser_analise_page', 'geiser_analise_page' );
 }
 
-add_action( 'rest_api_init', 'geiser_register_api_routes' );
-function geiser_register_api_routes() {
-    register_rest_route( 'geiser/v1', '/logs', array(
-        'methods' => 'POST',
-        'callback' => 'geiser_logs_endpoint',
-        'permission_callback' => function () {
-            return current_user_can( 'manage_options' );
-        }
-    ) );
+function geiser_admin_page()
+{
+	echo("Geiser Admin");
 }
 
+function geiser_dispositivos_page()
+{
+	echo("Geiser Dispositivo");
+}
+
+function geiser_logs_page()
+{
+	echo("Geiser logs");	
+}
+
+function geiser_analise_page()
+{
+	echo("Geiser Analise");	
+}
 
 // Endpoint do web service para inserir dados na tabela geiser_logs
 function geiser_logs_endpoint( WP_REST_Request $request ) {
