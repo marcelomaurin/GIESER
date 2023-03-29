@@ -79,6 +79,27 @@ function geiser_admin_menu() {
     add_submenu_page( 'geiser-admin', 'Análise', 'Análise', 'manage_options', 'geiser_analise_page', 'geiser_analise_page' );
 }
 
+add_action('rest_api_init', 'registrar_rota_personalizada');
+
+function registrar_rota_personalizada() {
+  register_rest_route('Geiser/v1', '/registro.php', [
+    'methods' => 'GET',
+    'callback' => 'geiser_reg_callback',
+  ]);
+}
+
+
+function geiser_reg_callback(WP_REST_Request $request) {
+  // Sua lógica de web service aqui
+
+  // Exemplo: retornar um JSON com uma mensagem de boas-vindas
+  $resposta = [
+    'mensagem' => 'Bem-vindo ao meu web service personalizado!'
+  ];
+
+  return new WP_REST_Response($resposta, 200);
+}
+
 function geiser_admin_page()
 {
 	echo("Geiser Admin");
