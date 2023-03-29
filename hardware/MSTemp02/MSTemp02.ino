@@ -1,4 +1,3 @@
-#include <SimpleDHT.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <SPI.h>
@@ -11,8 +10,7 @@
 // Conversion factor - CPM to uSV/h
 #define CONV_FACTOR 0.0793
 
-// Pins
-int pinDHT22 = 4;
+
 
 const int GEIGER_COUNTER_PIN = 3;
 
@@ -22,7 +20,7 @@ long countPerMinute = 0;
 float usvh = 0.0;
 long timePreviousMeassure = 0;
 
-SimpleDHT22 dht22(pinDHT22);
+
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
@@ -127,11 +125,7 @@ void writeLCD()
   memset(disp,0,sizeof(disp2));
   lcd.setCursor(0,0);
   lcd.print(Ethernet.localIP());
-  //sprintf(aux,"T:%sC H:%s",dtostrf(temperature,5,1,disp),dtostrf(humidity,5,1,disp2));
-  //Serial.print("Display:");
-  //Serial.println(aux);
-  //lcd.printstr("ABCDE");
-  //lcd.print(aux);
+
   memset(aux, 0, sizeof(aux));
   memset(disp,0,sizeof(disp));
   memset(disp,0,sizeof(disp2));
@@ -157,9 +151,7 @@ void readGeiser()
     Serial.print("uSv/h=");
     Serial.println(usvh, 4);
     count = 0;
-  }
-  
-  
+  }  
 }
 
 void WriteSite()
@@ -186,17 +178,6 @@ void WriteSite()
   beginMicros = micros();
 }
 
-void readDHT()
-{ 
-  // read with raw sample data.
-  
-   int err = SimpleDHTErrSuccess;
-  if ((err = dht22.read2(&temperature, &humidity, NULL)) != SimpleDHTErrSuccess) {
-    Serial.print("Read DHT22 failed, err="); Serial.println(err);delay(2000);
-    return;
-  }
-}
-
 
 void writeSerial()
 {
@@ -217,12 +198,11 @@ void writeSerial()
 
 void loop() {
   // start working...
-  readDHT();
   readGeiser();
   writeLCD();
-  // DHT21 sampling rate is 1HZ.
+  WriteSite(); /*Grava dados no site */
   writeSerial();
-  //delay(1500);
+  delay(1000);
 }
 
 void tick() {
