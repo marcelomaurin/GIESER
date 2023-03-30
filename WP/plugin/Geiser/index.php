@@ -101,10 +101,39 @@ function registrar_rota_personalizada() {
 function geiser_lst_callback(WP_REST_Request $request) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'geiser_logs';
-    $results = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
 
-    return new WP_REST_Response($results, 200);
+    // Obtenha os parâmetros do corpo da solicitação
+    $data_inicio = $request->get_param('data_inicio');
+    $data_fim = $request->get_param('data_fim');
+    $ip = $request->get_param('ip');
+
+    // Construa a consulta SQL
+    $sql = "SELECT * FROM {$table_name}";
+
+    $where_clauses = array();
+    if (!empty($data_inicio)) {
+        $where_clauses[] = $wpdb->prepare('lastdt >= %s', $data_inicio);
+    }
+    if (!empty($data_fim)) {
+        $where_clauses[] = $wpdb->prepare('lastdt <= %s', $data_fim);
+    }
+    if (!empty($ip)) {
+        $where_clauses[] = $wpdb->prepare('ip = %s', $ip);
+    }
+
+    if (!empty($where_clauses)) {
+        $sql .= ' WHERE ' . implode(' AND ', $where_clauses);
+    }
+
+    $sql .= ' ORDER BY lastdt DESC';
+
+    // Execute a consulta e obtenha os resultados
+    $logs = $wpdb->get_results($sql);
+
+    // Retorne os resultados como uma resposta JSON
+    return new WP_REST_Response($logs, 200);
 }
+
 
 
 function registrar_rota2_personalizada() {
@@ -117,29 +146,49 @@ function registrar_rota2_personalizada() {
 function geiser_reg_callback(WP_REST_Request $request) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'geiser_logs';
+	
+	$usvh = $request->get_param('usvh');
+	$temp = $request->get_param('temp');
+	$hum = $request->get_param('hum');
+	
+    
+    // Obtenha o IP do cliente
+    $ip = $_SERVER['REMOTE_ADDR'];
 
-    // Obtenha os parâmetros do corpo da solicitação POST
-    $id_leitor = $request->get_param('id_leitor');
-    $nome = $request->get_param('nome');
-    $ip = $request->get_param('ip');
-    $lastdt = $request->get_param('lastdt');
-    $status = $request->get_param('status');
+    // Verificar se o dispositivo está cadastrado na tabela geiser_leitores
+    $device = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}geiser_leitores WHERE ip = '$ip'");
 
-    // Insira os dados na tabela geiser_logs
-    $data = array(
-        'id_leitor' => $id_leitor,
-        'nome' => $nome,
-        'ip' => $ip,
-        'lastdt' => $lastdt,
-        'status' => $status
+	if ($device === null) {
+		return new WP_REST_Response(array('error' => 'usvh não definido'), 404);
+	}
+    if ($device === null) {
+        return new WP_REST_Response(array('error' => 'Device não cadastrado'), 404);
+    }
+
+    // Obtenha a data e hora atual do sistema
+    $lastdt = date('Y-m-d H:i:s');
+
+    // O campo status deve ser sempre 1
+    $status = 1;
+
+    // Insira os dados na tabela
+    $wpdb->insert(
+        $table_name,
+        array(
+            'usvh' => $usvh,
+            'temp' => $temp,
+			'hum' => $hum,
+            'ip' => $ip,
+            'lastdt' => $lastdt,
+            'status' => $status,
+            'device_id' => $device->id,
+            'token' => $device->token
+        ),
+        array('%s', '%s', '%s', '%s', '%d', '%d', '%s')
     );
-    $wpdb->insert($table_name, $data);
 
-    // Retorne uma resposta JSON confirmando o sucesso da operação
-    $resposta = [
-        'mensagem' => 'Dados inseridos na tabela com sucesso.'
-    ];
-    return new WP_REST_Response($resposta, 200);
+    // Retorne uma resposta JSON com uma mensagem de sucesso
+    return new WP_REST_Response(array('message' => 'Registro inserido com sucesso!'), 200);
 }
 
 
