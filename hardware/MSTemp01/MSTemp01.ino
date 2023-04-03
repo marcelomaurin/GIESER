@@ -7,7 +7,11 @@
 //      GND: GND
 //      DATA: 2
 // Conversion factor - CPM to uSV/h
-#define CONV_FACTOR 0.0793
+//#define CONV_FACTOR 0.0793  //USP balanceado
+#define CONV_FACTOR 0.0085  //contador chines
+
+//#define MAXTIME 10000 //Tempo entre leituras 10s
+#define MAXTIME 10000 //Tempo entre leituras 10s
 
 // Pins
 int pinDHT22 = 4;
@@ -91,8 +95,8 @@ void writeLCD()
 
 void readGeiser()
 {  
-  if (millis() - timePreviousMeassure > 10000){
-    countPerMinute = 6 * count;
+  if (millis() - timePreviousMeassure > MAXTIME){
+    countPerMinute = ((int)((60/(MAXTIME/1000))) * count);
     usvh = countPerMinute * CONV_FACTOR;
     timePreviousMeassure = millis();
     Serial.print("cpm="); 
@@ -142,7 +146,7 @@ void loop() {
   writeLCD();
   // DHT21 sampling rate is 1HZ.
   writeSerial();
-  //delay(1500);
+  delay(500);
 }
 
 void tick() {

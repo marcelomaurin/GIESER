@@ -62,6 +62,8 @@ begin
   FSETMAIN.URL := frmSetup.edURL.text;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   FSETMAIN.STOPBIT := frmSetup.rgStopbit.ItemIndex;
+  FSETMAIN.SalvaContexto();
+
 end;
 
 end.

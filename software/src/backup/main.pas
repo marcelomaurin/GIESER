@@ -9,12 +9,10 @@ uses
   ExtCtrls, Menus, PopupNotifier, LazSerial, FileUtil, LazFileUtils, LazSynaSer,
   synaser, IdHTTPServer, lNetComponents, LedNumber, setmain, registro, peso,
   setup, lNet, log, IdCustomHTTPServer,  IdCompressionIntercept,
-  IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext;
+  IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext, lHTTP, fphttpclient, httpprotocol;
 
 Const
-    Version : string =  '0.02';
-    PortTemp = 8098;
-    ServerName :string = 'localhost';
+    Version : string =  '0.03';
 
 
 type
@@ -27,13 +25,11 @@ type
     Button1: TButton;
     btConectar: TButton;
     btSetup: TButton;
-    IdHTTPServer1: TIdHTTPServer;
     IdSchedulerOfThreadDefault1: TIdSchedulerOfThreadDefault;
     IdServerCompressionIntercept1: TIdServerCompressionIntercept;
     lbVersao: TLabel;
     lbstatus: TLabel;
     LazSerial1: TLazSerial;
-    LTCPComponent1: TLTCPComponent;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -60,8 +56,6 @@ type
     procedure LazSerial1RxData(Sender: TObject);
     procedure LazSerial1Status(Sender: TObject; Reason: THookSerialReason;
       const Value: string);
-    procedure LTCPComponent1Connect(aSocket: TLSocket);
-    procedure LTCPComponent1Receive(aSocket: TLSocket);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
@@ -78,7 +72,8 @@ type
     procedure SalvarContexto();
     procedure Setup();
     procedure getPage(aSocket : TLSocket; PeerAddress : string; mensagem: string);
-    procedure RespostaHTMLCabecalho(aSocket: TLSocket);
+
+    procedure SendData(uSVH: string; temp: string; hum: string; url: string);
   public
 
   end;
@@ -92,19 +87,40 @@ implementation
 
 { Tfrmmain }
 
+procedure Tfrmmain.SendData(uSVH: string; temp: string; hum: string; url: string);
+var
+  lHTTP1: TFPHttpClient;
+  lData: TStringList;
+begin
+  lHTTP1 := TFPHttpClient.Create(nil);
+  lData := TStringList.Create;
+  try
+    lHTTP1.AllowRedirect := True;
+
+    lData.Add('uSVH=' + uSVH);
+    lData.Add('temp=' + temp);
+    lData.Add('hum=' + hum);
+
+    lHTTP1.FormPost(url, lData);
+  finally
+    lData.Free;
+    lHTTP1.Free;
+  end;
+end;
+
+
 procedure Tfrmmain.FormCreate(Sender: TObject);
 begin
   Lbuffer:= '';
   frmlog := TfrmLog.create(self);
-  frmsetup := Tfrmsetup.create(self);
+
   Fsetmain := TSetmain.create();
   self.left := Fsetmain.posx;
   self.top := fsetmain.posy;
-  frmSetup.edSerialPort.text := FSETMAIN.COMPORT;
+
   frmRegistrar := TfrmRegistrar.Create(self);
   frmRegistrar.Identifica();
-  frmpeso := TFrmpeso.create(self);
-  frmpeso.show();
+
   ListDev();
   lbVersao.Caption:= Version;
 end;
@@ -115,7 +131,7 @@ begin
   Fsetmain.free();
   frmlog.free;
   frmRegistrar.free;
-  frmSetup.free;
+  //frmSetup.free;
 end;
 
 procedure Tfrmmain.IdHTTPServer1CommandGet(AContext: TIdContext;
@@ -239,39 +255,7 @@ begin
 
 end;
 
-procedure Tfrmmain.LTCPComponent1Connect(aSocket: TLSocket);
-begin
-  aSocket.SendMessage('Connected!');
-  //frmLog.Log('Connected:'+aSocket.PeerAddress);
-end;
 
-procedure Tfrmmain.LTCPComponent1Receive(aSocket: TLSocket);
-var
-  mensagem : string;
-  strnro : string;
-  posicao : integer;
-begin
-  //Mensagem recebida padrao Fila:nro+#13
-  aSocket.GetMessage(mensagem);
-  //PopupNotifier1.Text:=mensagem;
-  //PopupNotifier1.Show;
-  //frmlog.Log('Receive:'+aSocket.PeerAddress+',msg:'+mensagem);
-  //if (mensagem <> '') then
-  //if (pos(mensagem,'GET / HTTP/1.1')<>-1) then
-  begin
-     frmlog.Log('rec:'+mensagem);
-     (*
-      if (POS(mensagem, 'PESO:')>=0) then
-      begin
-        aSocket.SendMessage('PESO:'+ frmPeso.lbPeso.Caption +#13);  //Vou implementar aqui
-        aSocket.Disconnect(true);
-      end;
-      *)
-     getPage(aSocket, aSocket.PeerAddress, mensagem);
-  end;
-  //aSocket.Disconnect(true);
-  LTCPComponent1.CallAction();
-end;
 
 procedure Tfrmmain.MenuItem1Click(Sender: TObject);
 begin
@@ -312,6 +296,7 @@ procedure Tfrmmain.Timer1Timer(Sender: TObject);
 begin
   //LazSerial1.WriteData(#05);
   Application.ProcessMessages();
+  SendData(frmPeso.lbRad.Caption,frmPeso.lbTemperatura.Caption, frmPeso.lbHumidade.caption , FSETMAIN.URL);
 end;
 
 procedure Tfrmmain.Button1Click(Sender: TObject);
@@ -334,23 +319,31 @@ procedure Tfrmmain.btConectarClick(Sender: TObject);
 begin
 
   try
-    LazSerial1.close;
-    LazSerial1.Device := FSETMAIN.COMPORT;
-    LazSerial1.BaudRate:= TBaudRate(FSETMAIN.BAUDRATE);
-    LazSerial1.DataBits:= TDataBits(FSETMAIN.DATABIT);
-    //LazSerial1.FlowControl:= TFlowControl(FSETMAIN.;
-    LazSerial1.Parity:= TParity(FSETMAIN.PARIDADE);
-    LazSerial1.StopBits:= TStopBits(FSETMAIN.STOPBIT);
+    if (Timer1.Enabled = false) then
+    begin
+      if (frmpeso<> nil) then
+      begin
+          frmpeso := TFrmpeso.create(self);
+      end;
+      LazSerial1.close;
+      LazSerial1.Device := FSETMAIN.COMPORT;
+      LazSerial1.BaudRate:= TBaudRate(FSETMAIN.BAUDRATE);
+      LazSerial1.DataBits:= TDataBits(FSETMAIN.DATABIT);
+      //LazSerial1.FlowControl:= TFlowControl(FSETMAIN.;
+      LazSerial1.Parity:= TParity(FSETMAIN.PARIDADE);
+      LazSerial1.StopBits:= TStopBits(FSETMAIN.STOPBIT);
 
-    LazSerial1.Open;
-    Application.ProcessMessages();
+      LazSerial1.Open;
 
+
+      frmpeso.show();
+      Application.ProcessMessages();
+      Timer1.Enabled:= true;
+      TrayIcon1.Visible:=true;
+      TrayIcon1.Hint:='Connected';
+    end;
   finally
-    Timer1.Enabled:= not Timer1.Enabled;
-    TrayIcon1.Visible:=true;
-    TrayIcon1.Hint:='Connected';
-    //IdHTTPServer1.DefaultPort (PortTemp);
-    IdHTTPServer1.active := true;
+
     hide;
   end;
 
@@ -363,6 +356,10 @@ begin
   Timer1.Enabled:= false;
   LazSerial1.close;
   Application.ProcessMessages();
+  if (frmpeso <> nil) then
+  begin
+    frmPeso.hide;
+  end;
 end;
 
 procedure Tfrmmain.btlogClick(Sender: TObject);
@@ -372,11 +369,12 @@ end;
 
 procedure Tfrmmain.btsairChange(Sender: TObject);
 begin
-     Application.Terminate;
+  Application.Terminate;
 end;
 
 procedure Tfrmmain.btSetupClick(Sender: TObject);
 begin
+     btDesconectar1Click(self);
      Setup();
 end;
 
@@ -439,37 +437,21 @@ end;
 
 procedure Tfrmmain.Setup();
 begin
+   frmsetup := Tfrmsetup.create(self);
+ // frmSetup.edSerialPort.text := FSETMAIN.COMPORT;
+  //192.168.0.105/wp-json/Geiser/v1/registro.php
   frmSetup.edSerialPort.text := FSETMAIN.COMPORT;
   frmSetup.cbBaudrate.ItemIndex:= FSETMAIN.BAUDRATE;
   frmSetup.cbDatabits.ItemIndex:= FSETMAIN.DATABIT;
   frmSetup.rgParity.ItemIndex:= FSETMAIN.PARIDADE;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
-  frmSetup.edURL.text := FSETMAIN.;
-  frmSetup.show();
+  frmSetup.edURL.text := FSETMAIN.URL;
+  frmSetup.showmodal();
+  frmsetup.free();
 end;
 
-procedure Tfrmmain.RespostaHTMLCabecalho(aSocket: TLSocket);
-var
-  buffer : string;
-begin
 
- buffer :='HTTP/1.1 200 OK '+#10;
- buffer := buffer +'Content-Type: text/html'+#10;
- buffer := buffer + '<!DOCTYPE HTML>'+#10;
- buffer := buffer + '<html>'+#10;
- buffer := buffer + '<head>'+#10;
- buffer := buffer + '<title>Meu SRV</title>'+#10;
- buffer := buffer + '</head>'+#10;
- buffer := buffer + '<body>'+#10;
- buffer := buffer + 'hello'+#10;
- buffer := buffer + '</body>'+#10;
- buffer := buffer + '</html>'+#10;
-
- //aSocket.SendMessage('Connection: close'+#10+#13);
- //aSocket.Send(UTF8Char(buffer),length(buffer));
-
-end;
 
 procedure Tfrmmain.getPage(aSocket: TLSocket; PeerAddress: string;
   mensagem: string);
@@ -477,24 +459,8 @@ var
   buffer : WIDEstring;
 begin
 
-  RespostaHTMLCabecalho(aSocket);
-  //aSocket.SendMessage('Host:'+ServerName+' '+#10+#13);
-  //buffer := buffer + 'Refresh: 5';
-  //buffer := buffer + #13#10;
-  (*
-  aSocket.SendMessage('<!DOCTYPE HTML>'+#10+#13);
-  aSocket.SendMessage('<html>'+#10+#13);
-  aSocket.SendMessage('<head>'+#10+#13);
-  aSocket.SendMessage('</head>'+#10+#13);
-  aSocket.SendMessage('<body>'+#10+#13);
-  aSocket.SendMessage('hello '+#10+#13);
-  aSocket.SendMessage('</body>'+#10+#13);
-  aSocket.SendMessage('</html>'+#10+#13);
-  //aSocket.Send(buffer,sizeof(buffer));
-  frmLog.Log('ENV:'+buffer);
-  //aSocket.SendMessage(buffer);
-  //LTCPComponent1.CallAction();
-  *)
+ // RespostaHTMLCabecalho(aSocket);
+
 end;
 
 end.

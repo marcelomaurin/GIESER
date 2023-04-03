@@ -59,9 +59,11 @@ begin
   FSETMAIN.BAUDRATE := frmSetup.cbBaudrate.ItemIndex;
   FSETMAIN.DATABIT := frmSetup.cbDatabits.ItemIndex;
   FSETMAIN.PARIDADE := frmSetup.rgParity.ItemIndex;
-  FSETMAIN.URL := frmSetup.
+  FSETMAIN.URL := frmSetup.edURL.text;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   FSETMAIN.STOPBIT := frmSetup.rgStopbit.ItemIndex;
+  FSETMAIN.SalvaContexto();
+
 end;
 
 end.

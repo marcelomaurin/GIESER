@@ -1,43 +1,42 @@
 object frmSetup: TfrmSetup
   Left = 576
-  Height = 477
+  Height = 382
   Top = 323
-  Width = 412
+  Width = 330
   Caption = 'Setup'
-  ClientHeight = 477
-  ClientWidth = 412
-  DesignTimePPI = 120
+  ClientHeight = 382
+  ClientWidth = 330
   LCLVersion = '2.2.4.0'
   object Label12: TLabel
-    Left = 16
-    Height = 20
-    Top = 139
-    Width = 79
+    Left = 13
+    Height = 15
+    Top = 111
+    Width = 62
     Caption = 'Serial PORT:'
     ParentColor = False
   end
   object edSerialPort: TEdit
-    Left = 17
-    Height = 28
-    Top = 161
-    Width = 160
+    Left = 14
+    Height = 23
+    Top = 129
+    Width = 128
     TabOrder = 0
     Text = 'COM9'
   end
   object Label13: TLabel
-    Left = 224
-    Height = 20
-    Top = 136
-    Width = 67
+    Left = 179
+    Height = 15
+    Top = 109
+    Width = 53
     Caption = 'BaudRate:'
     ParentColor = False
   end
   object cbBaudrate: TComboBox
-    Left = 225
-    Height = 28
-    Top = 161
-    Width = 159
-    ItemHeight = 20
+    Left = 180
+    Height = 23
+    Top = 129
+    Width = 127
+    ItemHeight = 15
     ItemIndex = 6
     Items.Strings = (
       '110'
@@ -63,10 +62,10 @@ object frmSetup: TfrmSetup
     Text = '9600'
   end
   object rgParity: TRadioGroup
-    Left = 9
-    Height = 151
-    Top = 210
-    Width = 161
+    Left = 7
+    Height = 121
+    Top = 168
+    Width = 129
     AutoFill = True
     Caption = 'Parity'
     ChildSizing.LeftRightSpacing = 6
@@ -76,8 +75,8 @@ object frmSetup: TfrmSetup
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 126
-    ClientWidth = 157
+    ClientHeight = 101
+    ClientWidth = 125
     ItemIndex = 0
     Items.Strings = (
       'None'
@@ -89,10 +88,10 @@ object frmSetup: TfrmSetup
     TabOrder = 2
   end
   object cbDatabits: TRadioGroup
-    Left = 9
-    Height = 100
-    Top = 370
-    Width = 191
+    Left = 7
+    Height = 80
+    Top = 296
+    Width = 153
     AutoFill = True
     Caption = 'Databits'
     ChildSizing.LeftRightSpacing = 6
@@ -102,8 +101,8 @@ object frmSetup: TfrmSetup
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 75
-    ClientWidth = 187
+    ClientHeight = 60
+    ClientWidth = 149
     Columns = 2
     Items.Strings = (
       '8bits'
@@ -114,10 +113,10 @@ object frmSetup: TfrmSetup
     TabOrder = 3
   end
   object rgFlowControl: TRadioGroup
-    Left = 216
-    Height = 131
-    Top = 200
-    Width = 125
+    Left = 173
+    Height = 105
+    Top = 160
+    Width = 100
     AutoFill = True
     Caption = 'FlowControl'
     ChildSizing.LeftRightSpacing = 6
@@ -127,8 +126,8 @@ object frmSetup: TfrmSetup
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 106
-    ClientWidth = 121
+    ClientHeight = 85
+    ClientWidth = 96
     ItemIndex = 0
     Items.Strings = (
       'None'
@@ -138,10 +137,10 @@ object frmSetup: TfrmSetup
     TabOrder = 4
   end
   object rgStopbit: TRadioGroup
-    Left = 224
-    Height = 65
-    Top = 344
-    Width = 156
+    Left = 179
+    Height = 52
+    Top = 275
+    Width = 125
     AutoFill = True
     Caption = 'StopBit'
     ChildSizing.LeftRightSpacing = 6
@@ -151,8 +150,8 @@ object frmSetup: TfrmSetup
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 40
-    ClientWidth = 152
+    ClientHeight = 32
+    ClientWidth = 121
     Columns = 2
     ItemIndex = 0
     Items.Strings = (
@@ -162,36 +161,36 @@ object frmSetup: TfrmSetup
     TabOrder = 5
   end
   object Button1: TButton
-    Left = 309
-    Height = 31
-    Top = 439
-    Width = 94
+    Left = 247
+    Height = 25
+    Top = 351
+    Width = 75
     Caption = 'Salvar'
     OnClick = Button1Click
     TabOrder = 6
   end
   object btCancelar: TButton
-    Left = 209
-    Height = 31
-    Top = 439
-    Width = 94
+    Left = 167
+    Height = 25
+    Top = 351
+    Width = 75
     Caption = 'Cancelar'
     OnClick = btCancelarClick
     TabOrder = 7
   end
   object Label14: TLabel
-    Left = 16
-    Height = 20
-    Top = 8
-    Width = 55
+    Left = 13
+    Height = 15
+    Top = 6
+    Width = 45
     Caption = 'URL WP:'
     ParentColor = False
   end
   object edURL: TEdit
-    Left = 17
-    Height = 28
-    Top = 24
-    Width = 367
+    Left = 14
+    Height = 23
+    Top = 19
+    Width = 294
     TabOrder = 8
     Text = '127.0.0.1'
   end

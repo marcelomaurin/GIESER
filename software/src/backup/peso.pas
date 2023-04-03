@@ -63,7 +63,7 @@ end;
 
 procedure TfrmPeso.FormDestroy(Sender: TObject);
 begin
-   Timer1.Enabled:= true;
+   Timer1.Enabled:= false;
 end;
 
 
