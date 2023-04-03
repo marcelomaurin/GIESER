@@ -66,7 +66,7 @@ type
     procedure Timer1StopTimer(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
-    Lbuffer: String;
+    Lbuffer: TStringList;
     procedure ListDev();
     function PegaSerial() : String;
     procedure SalvarContexto();
@@ -85,33 +85,38 @@ implementation
 
 {$R *.lfm}
 
-{ Tfrmmain }
 
 procedure Tfrmmain.SendData(uSVH: string; temp: string; hum: string; url: string);
 var
   lHTTP1: TFPHttpClient;
   lData: TStringList;
 begin
-  lHTTP1 := TFPHttpClient.Create(nil);
-  lData := TStringList.Create;
-  try
-    lHTTP1.AllowRedirect := True;
+  if (URL<> '') then
+  begin
+    lHTTP1 := TFPHttpClient.Create(nil);
+    lData := TStringList.Create;
+    try
+      lHTTP1.AllowRedirect := True;
 
-    lData.Add('uSVH=' + uSVH);
-    lData.Add('temp=' + temp);
-    lData.Add('hum=' + hum);
+      lData.Add('uSVH=' + uSVH);
+      lData.Add('temp=' + temp);
+      lData.Add('hum=' + hum);
 
-    lHTTP1.FormPost(url, lData);
-  finally
-    lData.Free;
-    lHTTP1.Free;
+      lHTTP1.FormPost(url, lData);
+    finally
+      lData.Free;
+      lHTTP1.Free;
+    end;
+
   end;
 end;
 
 
 procedure Tfrmmain.FormCreate(Sender: TObject);
 begin
-  Lbuffer:= '';
+  Lbuffer:= Tstringlist.create();
+  lbuffer.clear;
+  lbuffer.DelimitedText:=#13+#10;
   frmlog := TfrmLog.create(self);
 
   Fsetmain := TSetmain.create();
@@ -128,9 +133,11 @@ end;
 procedure Tfrmmain.FormDestroy(Sender: TObject);
 begin
   SalvarContexto();
+  Lbuffer.free;
   Fsetmain.free();
   frmlog.free;
   frmRegistrar.free;
+
   //frmSetup.free;
 end;
 
@@ -176,78 +183,52 @@ end;
 
 procedure Tfrmmain.LazSerial1RxData(Sender: TObject);
 var
-  info : string;
-  pos1 , pos2: integer;
-  parte : string;
+  info, parte: string;
+  pos1, pos2: integer;
 begin
-
-  if( LazSerial1.DataAvailable) then
+  if (LazSerial1.DataAvailable) then
   begin
     info := LazSerial1.ReadData();
   end;
-  pos2 := pos(#13,info);
-  if (pos2=-1)  then
+
+  Lbuffer.Text := Lbuffer.Text + info;
+
+  for pos2 := 0 to Lbuffer.Count - 1 do
   begin
-     Lbuffer:=Lbuffer + info;
-  end
-  else
-  begin
-     Lbuffer:=Lbuffer + info;
+    parte := Lbuffer[pos2];
 
-     pos1:= pos('Temperatura:',Lbuffer);
-     //pos2 := Length(Lbuffer);
-     if (pos1<>0)  then
-     begin
-       parte:= copy(LBuffer,pos1+12,length(LBuffer));
-       pos2:= pos(#13,parte);
-       parte := copy(parte,0,pos2-1);
-       frmpeso.Temperatura(parte);
-       Application.ProcessMessages;
-       LBuffer := '';
-     end;
-     pos1:= pos('Humidade:',Lbuffer);
-     //pos2 := Length(Lbuffer);
-     if (pos1<>0)  then
-     begin
-       parte:= copy(LBuffer,pos1+9,length(LBuffer));
-       pos2:= pos(#13,parte);
-       parte := copy(parte,0,pos2-1);
-       frmpeso.Humidade(parte);
-       Application.ProcessMessages;
-       LBuffer := '';
-     end;
-     pos1:= pos('CPM:',Lbuffer);
-     //pos2 := Length(Lbuffer);
-     if (pos1<>0)  then
-     begin
-       parte:= copy(LBuffer,pos1+4,length(LBuffer));
-       pos2:= pos(#13,parte);
-       parte := copy(parte,0,pos2-1);
-       frmpeso.Pulso(parte);
-       Application.ProcessMessages;
-       LBuffer := '';
-     end;
-     pos1:= pos('uSVH:',Lbuffer);
-     //pos2 := Length(Lbuffer);
-     if (pos1<>0)  then
-     begin
-       parte:= copy(LBuffer,pos1+5,length(LBuffer));
-       pos2:= pos(#13,parte);
-       parte := copy(parte,0,pos2-1);
-       frmpeso.Radiacao(parte);
-       Application.ProcessMessages;
-       LBuffer := '';
-     end;
+    pos1 := pos('Temperatura:', parte);
+    if (pos1 <> 0) then
+    begin
+      frmpeso.Temperatura(Copy(parte, pos(':',parte) + 1, Length(parte)));
+      Continue;
+    end;
 
+    pos1 := pos('Humidade:', parte);
+    if (pos1 <> 0) then
+    begin
+      frmpeso.Humidade(Copy(parte, pos(':',parte) + 1, Length(parte)));
+      Continue;
+    end;
 
-     //Se chegar no final e nao tiver
-     pos1:= pos(#13,Lbuffer);
-     if(pos1<>0) then
-     begin
-       LBuffer := '';
-     end;
+    pos1 := pos('CPM:', parte);
+    if (pos1 <> 0) then
+    begin
+      frmpeso.Pulso(Copy(parte, pos(':',parte) + 1, Length(parte)));
+      Continue;
+    end;
+
+    pos1 := pos('uSVH:', parte);
+    if (pos1 <> 0) then
+    begin
+      frmpeso.Radiacao(Copy(parte, pos(':',parte) + 1, Length(parte)));
+    end;
   end;
+
+  Lbuffer.Clear;
+  Application.ProcessMessages;
 end;
+
 
 procedure Tfrmmain.LazSerial1Status(Sender: TObject; Reason: THookSerialReason;
   const Value: string);
@@ -296,7 +277,9 @@ procedure Tfrmmain.Timer1Timer(Sender: TObject);
 begin
   //LazSerial1.WriteData(#05);
   Application.ProcessMessages();
+
   SendData(frmPeso.lbRad.Caption,frmPeso.lbTemperatura.Caption, frmPeso.lbHumidade.caption , FSETMAIN.URL);
+
 end;
 
 procedure Tfrmmain.Button1Click(Sender: TObject);
@@ -321,7 +304,7 @@ begin
   try
     if (Timer1.Enabled = false) then
     begin
-      if (frmpeso<> nil) then
+      if (frmpeso= nil) then
       begin
           frmpeso := TFrmpeso.create(self);
       end;
@@ -340,11 +323,8 @@ begin
       TrayIcon1.Hint:='Connected';
     end;
   finally
-
     hide;
   end;
-
-
 end;
 
 procedure Tfrmmain.btDesconectar1Click(Sender: TObject);

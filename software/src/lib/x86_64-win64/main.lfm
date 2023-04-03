@@ -10,6 +10,7 @@ object frmmain: Tfrmmain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  Position = poMainFormCenter
   LCLVersion = '2.2.4.0'
   object Button1: TButton
     Left = 20
@@ -90,7 +91,7 @@ object frmmain: Tfrmmain
     SynSer.ConvertLineEnd = False
     SynSer.AtTimeout = 1000
     SynSer.InterPacketTimeout = True
-    Device = 'COM4'
+    Device = 'COM3'
     RcvLineCRLF = False
     OnRxData = LazSerial1RxData
     Left = 350
@@ -268,15 +269,6 @@ object frmmain: Tfrmmain
       OnClick = btlogClick
     end
   end
-  object LTCPComponent1: TLTCPComponent
-    Port = 0
-    OnReceive = LTCPComponent1Receive
-    OnConnect = LTCPComponent1Connect
-    Timeout = 0
-    ReuseAddress = False
-    Left = 60
-    Top = 170
-  end
   object PopupNotifier1: TPopupNotifier
     Color = clInfoBk
     Icon.Data = {
@@ -300,15 +292,5 @@ object frmmain: Tfrmmain
     MaxThreads = 0
     Left = 224
     Top = 184
-  end
-  object IdHTTPServer1: TIdHTTPServer
-    Bindings = <>
-    DefaultPort = 8098
-    Intercept = IdServerCompressionIntercept1
-    Scheduler = IdSchedulerOfThreadDefault1
-    AutoStartSession = True
-    OnCommandGet = IdHTTPServer1CommandGet
-    Left = 392
-    Top = 152
   end
 end

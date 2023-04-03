@@ -58,7 +58,7 @@ begin
   frmRegistrar.FRad:= lbRad.Caption;
   frmRegistrar.FTemp := lbTemperatura.Caption;
   frmRegistrar.FPulso:=lbPulso.Caption;
-  frmRegistrar.Registra_log();
+  //frmRegistrar.Registra_log();
 end;
 
 procedure TfrmPeso.FormDestroy(Sender: TObject);

@@ -1,129 +1,130 @@
 object frmPeso: TfrmPeso
   Left = 561
-  Height = 294
+  Height = 368
   Top = 307
-  Width = 252
+  Width = 315
   Caption = 'Medidas'
-  ClientHeight = 294
-  ClientWidth = 252
+  ClientHeight = 368
+  ClientWidth = 315
+  DesignTimePPI = 120
   OnDestroy = FormDestroy
   Position = poMainFormCenter
   LCLVersion = '2.2.4.0'
   object Label2: TLabel
-    Left = 8
-    Height = 32
-    Top = 8
-    Width = 139
+    Left = 10
+    Height = 41
+    Top = 10
+    Width = 173
     Caption = 'Temperatura:'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object lbTemperatura: TLEDNumber
-    Left = 26
-    Height = 30
-    Top = 45
-    Width = 85
+    Left = 32
+    Height = 38
+    Top = 56
+    Width = 106
     Caption = '00000'
     Columns = 5
   end
   object Label3: TLabel
-    Left = 115
-    Height = 32
-    Top = 42
-    Width = 15
+    Left = 144
+    Height = 41
+    Top = 52
+    Width = 19
     Caption = 'C'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 120
-    Height = 32
-    Top = 105
-    Width = 20
+    Left = 150
+    Height = 41
+    Top = 131
+    Width = 25
     Caption = '%'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object lbHumidade: TLEDNumber
-    Left = 30
-    Height = 30
-    Top = 107
-    Width = 85
+    Left = 38
+    Height = 38
+    Top = 134
+    Width = 106
     Caption = '00000'
     Columns = 5
   end
   object Label5: TLabel
-    Left = 13
-    Height = 32
-    Top = 70
-    Width = 116
+    Left = 16
+    Height = 41
+    Top = 88
+    Width = 145
     Caption = 'Humidade:'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object Label6: TLabel
-    Left = 14
-    Height = 32
-    Top = 141
-    Width = 100
+    Left = 18
+    Height = 41
+    Top = 176
+    Width = 127
     Caption = 'Radiação:'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object lbRad: TLEDNumber
-    Left = 30
-    Height = 30
-    Top = 178
-    Width = 85
+    Left = 38
+    Height = 38
+    Top = 222
+    Width = 106
     Caption = '00000'
     Columns = 5
   end
   object Label7: TLabel
-    Left = 120
-    Height = 32
-    Top = 175
-    Width = 61
+    Left = 150
+    Height = 41
+    Top = 219
+    Width = 75
     Caption = 'uSv/h'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object Label8: TLabel
-    Left = 14
-    Height = 32
-    Top = 211
-    Width = 72
+    Left = 18
+    Height = 41
+    Top = 264
+    Width = 92
     Caption = 'Pulsos:'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object lbPulso: TLEDNumber
-    Left = 32
-    Height = 30
-    Top = 248
-    Width = 85
+    Left = 40
+    Height = 38
+    Top = 310
+    Width = 106
     Caption = '00000'
     Columns = 5
   end
   object Label9: TLabel
-    Left = 120
-    Height = 32
-    Top = 246
-    Width = 48
+    Left = 150
+    Height = 41
+    Top = 308
+    Width = 61
     Caption = 'PPM'
-    Font.Height = -24
+    Font.Height = -30
     ParentColor = False
     ParentFont = False
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer
-    Left = 174
-    Top = 96
+    Left = 218
+    Top = 120
   end
 end
