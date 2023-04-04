@@ -290,29 +290,9 @@ function geiser_logs_page() {
     // Iniciar a saída do HTML
     ob_start();
     ?>
-    <style>
-        .geiser-table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        .geiser-table th, .geiser-table td {
-            border: 1px solid #ccc;
-            padding: 5px;
-            text-align: left;
-        }
-        .geiser-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-    </style>
-    <script>
-        setTimeout(function() {
-            location.reload();
-        }, 5000);
-    </script>
     <div class="wrap">
         <h1>Geiser Logs</h1>
-        <table class="geiser-table">
+        <table border="1" cellspacing="0" cellpadding="5">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -321,17 +301,20 @@ function geiser_logs_page() {
                     <th>usv/h</th>
                     <th>Temperatura</th>
                     <th>Humidade</th>
+
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($logs as $log): ?>
                     <tr>
                         <td><?php echo intval($log['id']); ?></td>
-                        <td><?php echo esc_html($log['token']); ?></td>
+                        <td><?php echo intval($log['token']); ?></td>
                         <td><?php echo esc_html($log['lastdt']); ?></td>
                         <td><?php echo esc_html($log['usvh']); ?></td>
                         <td><?php echo esc_html($log['temp']); ?></td>
                         <td><?php echo esc_html($log['hum']); ?></td>
+
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -352,8 +335,10 @@ function geiser_logs_page() {
             </div>
         </div>
     </div>
-
-
+    <?php
+    // Encerrar a saída do HTML
+    echo ob_get_clean();
+}
 
 
 function geiser_analise_page() {
@@ -361,7 +346,7 @@ function geiser_analise_page() {
     $table_name = $wpdb->prefix . 'geiser_logs';
 
     // Obtenha os dados do banco de dados
-    $logs = $wpdb->get_results("SELECT id_leitor, DATE(lastdt) as date, COUNT(*) as count FROM $table_name GROUP BY id_leitor, DATE(lastdt) ORDER BY id_leitor, DATE(lastdt)", ARRAY_A);
+    $logs = $wpdb->get_results("SELECT token, TIMESTAMP(lastdt) as datetime, AVG(usvh) as avg_usvh, AVG(temp) as avg_temp, AVG(hum) as avg_hum FROM $table_name GROUP BY token, UNIX_TIMESTAMP(lastdt) DIV (15 * 60) ORDER BY token, datetime", ARRAY_A);
 
     // Iniciar a saída do HTML
     ob_start();
@@ -371,26 +356,49 @@ function geiser_analise_page() {
         <div>
             <canvas id="geiserChart"></canvas>
         </div>
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Organiza os dados para o gráfico
                 var logs = <?php echo json_encode($logs); ?>;
-                var leitores = [];
-                var data = {};
+                var tokens = [];
+                var data = {
+                    usvh: {},
+                    temp: {},
+                    hum: {}
+                };
 
                 logs.forEach(function (log) {
-                    if (!data.hasOwnProperty(log.id_leitor)) {
-                        data[log.id_leitor] = [];
+                    if (!data.usvh.hasOwnProperty(log.token)) {
+                        data.usvh[log.token] = [];
+                        data.temp[log.token] = [];
+                        data.hum[log.token] = [];
                     }
-                    data[log.id_leitor].push({x: log.date, y: log.count});
+                    data.usvh[log.token].push({x: log.datetime, y: parseFloat(log.avg_usvh)});
+                    data.temp[log.token].push({x: log.datetime, y: parseFloat(log.avg_temp)});
+                    data.hum[log.token].push({x: log.datetime, y: parseFloat(log.avg_hum)});
                 });
 
-                Object.keys(data).forEach(function (key) {
-                    leitores.push({
-                        label: 'Leitor ' + key,
-                        data: data[key],
+                Object.keys(data.usvh).forEach(function (key) {
+                    tokens.push({
+                        label: 'Token ' + key + ' - usvh',
+                        data: data.usvh[key],
                         fill: false,
                         borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    });
+                    tokens.push({
+                        label: 'Token ' + key + ' - temp',
+                        data: data.temp[key],
+                        fill: false,
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    });
+                    tokens.push({
+                        label: 'Token ' + key + ' - hum',
+                        data: data.hum[key],
+                        fill: false,
+                        borderColor: 'rgb(255, 205, 86)',
                         tension: 0.1
                     });
                 });
@@ -400,14 +408,17 @@ function geiser_analise_page() {
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        datasets: leitores
+                        datasets: tokens
                     },
                     options: {
                         scales: {
                             x: {
                                 type: 'time',
                                 time: {
-                                    unit: 'day'
+                                    unit: 'minute',
+                                    displayFormats: {
+                                        minute: 'HH:mm'
+                                    }
                                 }
                             }
                         }
@@ -420,6 +431,7 @@ function geiser_analise_page() {
     // Encerrar a saída do HTML
     echo ob_get_clean();
 }
+
 
 
 // Endpoint do web service para inserir dados na tabela geiser_logs
