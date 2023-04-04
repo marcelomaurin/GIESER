@@ -268,7 +268,6 @@ function geiser_dispositivos_page() {
 
 
 
-
 function geiser_logs_page() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'geiser_logs';
@@ -290,9 +289,29 @@ function geiser_logs_page() {
     // Iniciar a saída do HTML
     ob_start();
     ?>
+    <style>
+        .geiser-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .geiser-table th, .geiser-table td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+        .geiser-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        setTimeout(function() {
+            location.reload();
+        }, 5000);
+    </script>
     <div class="wrap">
         <h1>Geiser Logs</h1>
-        <table border="1" cellspacing="0" cellpadding="5">
+        <table class="geiser-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -301,7 +320,6 @@ function geiser_logs_page() {
                     <th>usv/h</th>
                     <th>Temperatura</th>
                     <th>Humidade</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -313,8 +331,6 @@ function geiser_logs_page() {
                         <td><?php echo esc_html($log['usvh']); ?></td>
                         <td><?php echo esc_html($log['temp']); ?></td>
                         <td><?php echo esc_html($log['hum']); ?></td>
-
-
                     </tr>
                 <?php endforeach; ?>
             </tbody>
