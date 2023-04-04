@@ -9,6 +9,8 @@
 //      DATA: 2
 // Conversion factor - CPM to uSV/h
 #define CONV_FACTOR 0.0793
+#define PORT 80
+#define url "127.0.0.1"
 
 
 
@@ -34,17 +36,14 @@ static char disp2[10];
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-// if you don't want to use DNS (and reduce your sketch size)
-// use the numeric IP instead of the name for the server:
-//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
-char server[] = "maurinsoft.com.br";    // name address for Google (using DNS)
+
 
 // Set the static IP address to use if the DHCP fails to assign
 IPAddress ip(192, 168, 0, 177);
 IPAddress myDns(192, 168, 0, 1);
 
 // Initialize the Ethernet client library
-// with the IP address and port of the server
+// with the IP address and port of the URL
 // that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
 
@@ -67,10 +66,14 @@ void start_Geiser()
   Serial.println("Init arduino geiger counter");
   
 }
-
 void start_Ethernet()
 {
-  // start the Ethernet connection:
+  // Define the MAC address, IP address and DNS server address
+  //byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+  //IPAddress ip(192, 168, 1, 177);
+  //IPAddress myDns(8, 8, 8, 8);
+
+  // Start the Ethernet connection:
   Serial.println("Initialize Ethernet with DHCP:");
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
@@ -93,7 +96,6 @@ void start_Ethernet()
     lcd.print(Ethernet.localIP());
     delay(2000);
   }
- 
 }
 
 void start_LCD()
@@ -156,20 +158,37 @@ void readGeiser()
 
 void WriteSite()
 {
-   // give the Ethernet shield a second to initialize:
+  // give the Ethernet shield a second to initialize:
   delay(1000);
   Serial.print("connecting to ");
-  Serial.print(server);
+  Serial.print(url);
   Serial.println("...");
 
   // if you get a connection, report back via serial:
-  if (client.connect(server, 8082)) {
+  if (client.connect(url, PORT)) {
     Serial.print("connected to ");
     Serial.println(client.remoteIP());
-    // Make a HTTP request:
-    client.println("GET /search?q=arduino HTTP/1.1");
-    client.println("Host: maurinsoft.com.br");
+
+    // Make a HTTP POST request:
+    client.println("POST /your_endpoint_here HTTP/1.1");
+    client.print("Host: ");
+    client.println(url);
+    client.println("Content-Type: application/json");
+    client.print("usvh: ");
+    client.println(usvh);
+    client.print("temp: ");
+    client.println(temperature);
+    client.print("hum: ");
+    client.println(humidity);
     client.println("Connection: close");
+
+    // Calculate the content length
+    String jsonBody = String("{\"usvh\":") + String(usvh) + String(",\"temp\":") + String(temperature) + String(",\"hum\":") + String(humidity) + String("}");
+    client.print("Content-Length: ");
+    client.println(jsonBody.length());
+
+    client.println(); // Required empty line before the body
+    client.print(jsonBody);
     client.println();
   } else {
     // if you didn't get a connection to the server:
