@@ -278,8 +278,7 @@ begin
   //LazSerial1.WriteData(#05);
   Application.ProcessMessages();
 
-  if (FSETMAIN.URL <> '') then
-    SendData(frmPeso.lbRad.Caption,frmPeso.lbTemperatura.Caption, frmPeso.lbHumidade.caption , FSETMAIN.URL);
+  SendData(frmPeso.lbRad.Caption,frmPeso.lbTemperatura.Caption, frmPeso.lbHumidade.caption , FSETMAIN.URL);
 
 end;
 
@@ -437,7 +436,7 @@ var
   buffer : WIDEstring;
 begin
 
- // RespostaHTMLCabecalho(aSocket);
+ //RespostaHTMLCabecalho(aSocket);
 
 end;
 

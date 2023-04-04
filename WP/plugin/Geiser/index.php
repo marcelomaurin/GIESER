@@ -30,16 +30,12 @@ function criar_tabelas() {
     $table_name2 = $wpdb->prefix . 'geiser_logs';
     $sql2 = "CREATE TABLE $table_name2 (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        id_leitor mediumint(9) NOT NULL,
-        nome varchar(50) NOT NULL,
-        ip varchar(50) NOT NULL,
-        lastdt datetime NOT NULL,
-		usvh float NOT NULL,
-		temp float NOT NULL,
-		hum  float NOT NULL,
-        status TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
-        PRIMARY KEY (id),
-        FOREIGN KEY (id_leitor) REFERENCES $table_name1(id)
+        token varchar(50) NOT NULL,
+        lastdt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	usvh float NOT NULL,
+	temp float NOT NULL,
+	hum  float NOT NULL,
+        PRIMARY KEY (id)
     ) $charset_collate;";
     dbDelta( $sql2 );
 }
@@ -147,22 +143,32 @@ function geiser_reg_callback(WP_REST_Request $request) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'geiser_logs';
 	
-	$usvh = $request->get_param('usvh');
-	$temp = $request->get_param('temp');
-	$hum = $request->get_param('hum');
+    $usvh = $request->get_param('usvh');
+    $temp = $request->get_param('temp');
+    $hum = $request->get_param('hum');
 	
     
     // Obtenha o IP do cliente
     $ip = $_SERVER['REMOTE_ADDR'];
+    //echo $ip;
+    //echo "<br/>";
+
+    $sql = "SELECT * FROM {$wpdb->prefix}geiser_leitores WHERE token = '$ip'";
+    //echo $sql;
+    //echo "<br/>";
 
     // Verificar se o dispositivo está cadastrado na tabela geiser_leitores
-    $device = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}geiser_leitores WHERE ip = '$ip'");
+    $device = $wpdb->get_row($sql);
 
-	if ($device === null) {
-		return new WP_REST_Response(array('error' => 'usvh não definido'), 404);
-	}
+    //echo $device;
+    //echo "<br/>";
+
+    if ($usvh === null)
+    {
+        return new WP_REST_Response(array('error' => 'usvh nao definido'), 404);
+    }
     if ($device === null) {
-        return new WP_REST_Response(array('error' => 'Device não cadastrado'), 404);
+        return new WP_REST_Response(array('error' => 'Device nao cadastrado'), 404);
     }
 
     // Obtenha a data e hora atual do sistema
@@ -177,12 +183,8 @@ function geiser_reg_callback(WP_REST_Request $request) {
         array(
             'usvh' => $usvh,
             'temp' => $temp,
-			'hum' => $hum,
-            'ip' => $ip,
-            'lastdt' => $lastdt,
-            'status' => $status,
-            'device_id' => $device->id,
-            'token' => $device->token
+            'hum' => $hum,
+            'token' => $ip
         ),
         array('%s', '%s', '%s', '%s', '%d', '%d', '%s')
     );
@@ -266,6 +268,7 @@ function geiser_dispositivos_page() {
 
 
 
+
 function geiser_logs_page() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'geiser_logs';
@@ -276,7 +279,7 @@ function geiser_logs_page() {
     $offset = ($current_page - 1) * $per_page;
 
     // Busca os registros da tabela geiser_logs ordenados cronologicamente
-    $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY lastdt DESC LIMIT %d OFFSET %d", $per_page, $offset), ARRAY_A);
+    $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY  lastdt DESC LIMIT %d OFFSET %d", $per_page, $offset), ARRAY_A);
 
     // Conta o total de registros na tabela geiser_logs
     $total_logs = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
@@ -287,28 +290,48 @@ function geiser_logs_page() {
     // Iniciar a saída do HTML
     ob_start();
     ?>
+    <style>
+        .geiser-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .geiser-table th, .geiser-table td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+        .geiser-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        setTimeout(function() {
+            location.reload();
+        }, 5000);
+    </script>
     <div class="wrap">
         <h1>Geiser Logs</h1>
-        <table border="1" cellspacing="0" cellpadding="5">
+        <table class="geiser-table">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>ID Leitor</th>
-                    <th>Nome</th>
-                    <th>IP</th>
+                    <th>Token</th>
                     <th>Data/Hora</th>
-                    <th>Status</th>
+                    <th>usv/h</th>
+                    <th>Temperatura</th>
+                    <th>Humidade</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($logs as $log): ?>
                     <tr>
                         <td><?php echo intval($log['id']); ?></td>
-                        <td><?php echo intval($log['id_leitor']); ?></td>
-                        <td><?php echo esc_html($log['nome']); ?></td>
-                        <td><?php echo esc_html($log['ip']); ?></td>
+                        <td><?php echo esc_html($log['token']); ?></td>
                         <td><?php echo esc_html($log['lastdt']); ?></td>
-                        <td><?php echo intval($log['status']) ? 'Ativo' : 'Inativo'; ?></td>
+                        <td><?php echo esc_html($log['usvh']); ?></td>
+                        <td><?php echo esc_html($log['temp']); ?></td>
+                        <td><?php echo esc_html($log['hum']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -329,10 +352,9 @@ function geiser_logs_page() {
             </div>
         </div>
     </div>
-    <?php
-    // Encerrar a saída do HTML
-    echo ob_get_clean();
-}
+
+
+
 
 function geiser_analise_page() {
     global $wpdb;

@@ -86,28 +86,31 @@ implementation
 {$R *.lfm}
 
 
-procedure Tfrmmain.SendData(uSVH: string; temp: string; hum: string; url: string);
+procedure Tfrmmain.SendData(usvh: string; temp: string; hum: string; url: string);
 var
   lHTTP1: TFPHttpClient;
-  lData: TStringList;
+  lData: TStrings;
+  lResponse: String;
 begin
-  if (URL<> '') then
+  if (URL <> '') then
   begin
     lHTTP1 := TFPHttpClient.Create(nil);
     lData := TStringList.Create;
     try
       lHTTP1.AllowRedirect := True;
 
-      lData.Add('uSVH=' + uSVH);
+      lData.Add('usvh=' + usvh);
       lData.Add('temp=' + temp);
       lData.Add('hum=' + hum);
 
-      lHTTP1.FormPost(url, lData);
+      lResponse := lHTTP1.FormPost(url, lData);
+
+      // Processar a resposta do servidor, se necessário
+      // ShowMessage(lResponse);
     finally
       lData.Free;
       lHTTP1.Free;
     end;
-
   end;
 end;
 
@@ -436,7 +439,7 @@ var
   buffer : WIDEstring;
 begin
 
- // RespostaHTMLCabecalho(aSocket);
+ //RespostaHTMLCabecalho(aSocket);
 
 end;
 
