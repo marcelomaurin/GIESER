@@ -20,7 +20,7 @@ function criar_tabelas() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         nome varchar(50) NOT NULL,
         token varchar(50) NOT NULL,
-        status TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+        status TINYINT(1) UNSIGNED  DEFAULT 1,
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -31,7 +31,7 @@ function criar_tabelas() {
     $sql2 = "CREATE TABLE $table_name2 (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         token varchar(50) NOT NULL,
-        lastdt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        lastdt timestamp  DEFAULT CURRENT_TIMESTAMP ,
 	usvh float NOT NULL,
 	temp float NOT NULL,
 	hum  float NOT NULL,
