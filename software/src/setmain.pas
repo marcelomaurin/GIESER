@@ -48,6 +48,7 @@ type
         FTipoImp : integer;
         FModeloImp : integer;
         FURL : String;
+        FPort : string;
         FMAQNAME : String;
 
 
@@ -76,6 +77,7 @@ type
         procedure SetModeloImp(value: integer);
         procedure SetURL(value: string);
         procedure SetMaqName(value : string);
+        procedure SetPort(value: string);
 
   public
         procedure SalvaContexto();
@@ -104,6 +106,7 @@ type
         property ModeloImp : integer read FModeloImp write SetModeloImp;
         property URL : string read FURL write SetURL;
         property MaqName : string read FMaqName write SetMaqName;
+        property PORT : string read FPORT write SetPort;
   end;
 
   var
@@ -232,6 +235,11 @@ begin
   FMAQNAME:= value;
 end;
 
+procedure TSetMain.SetPort(value: string);
+begin
+  FPort := value;
+end;
+
 
 
 //Valores default do codigo
@@ -262,6 +270,7 @@ begin
     FTipoImp := 0;
     FModeloImp := 0;
     FURL := '127.0.0.1';
+    FPORT := '80';
     FMaqName := GetLocalMachineName;
 end;
 
@@ -365,6 +374,10 @@ begin
     begin
       FMAQNAME := RetiraInfo(arquivo.Strings[posicao]);
     end;
+    if  BuscaChave(arquivo,'PORT:',posicao) then
+    begin
+      FPORT := RetiraInfo(arquivo.Strings[posicao]);
+    end;
 end;
 
 //Metodo construtor
@@ -427,6 +440,7 @@ begin
   arquivo.Append('MODELOIMP:'+ inttostr(FMODELOIMP));
   arquivo.Append('URL:'+ FURL);
   arquivo.Append('MAQNAME:'+ FMAQNAME);
+  arquivo.Append('PORT:'+ FPORT);
   arquivo.SaveToFile(fpath+filename);
 end;
 

@@ -12,7 +12,7 @@ uses
   IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext, lHTTP, fphttpclient, httpprotocol;
 
 Const
-    Version : string =  '0.03';
+    Version : string =  '0.04';
 
 
 type
@@ -86,28 +86,37 @@ implementation
 {$R *.lfm}
 
 
-procedure Tfrmmain.SendData(uSVH: string; temp: string; hum: string; url: string);
+procedure Tfrmmain.SendData(usvh: string; temp: string; hum: string; url: string);
 var
   lHTTP1: TFPHttpClient;
-  lData: TStringList;
+  lData: TStrings;
+  lResponse: String;
 begin
-  if (URL<> '') then
+  if (URL <> '') then
   begin
     lHTTP1 := TFPHttpClient.Create(nil);
+
     lData := TStringList.Create;
     try
       lHTTP1.AllowRedirect := True;
 
-      lData.Add('uSVH=' + uSVH);
+      lData.Add('usvh=' + usvh);
       lData.Add('temp=' + temp);
       lData.Add('hum=' + hum);
-
-      lHTTP1.FormPost(url, lData);
+      if (FSETMAIN.PORT <> '80') then
+      begin
+           lResponse := lHTTP1.FormPost(url, lData);
+      end
+      else
+      begin
+        lResponse := lHTTP1.FormPost(url, lData);
+      end;
+      // Processar a resposta do servidor, se necessário
+      // ShowMessage(lResponse);
     finally
       lData.Free;
       lHTTP1.Free;
     end;
-
   end;
 end;
 
@@ -424,6 +433,7 @@ begin
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
   frmSetup.edURL.text := FSETMAIN.URL;
+  frmSetup.edPort.text := FSETMAIN.PORT;
   frmSetup.showmodal();
   frmsetup.free();
 end;

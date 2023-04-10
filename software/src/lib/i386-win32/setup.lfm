@@ -7,7 +7,7 @@ object frmSetup: TfrmSetup
   ClientHeight = 382
   ClientWidth = 330
   Position = poMainFormCenter
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '2.2.6.0'
   object Label12: TLabel
     Left = 13
     Height = 15
@@ -21,7 +21,7 @@ object frmSetup: TfrmSetup
     Height = 23
     Top = 129
     Width = 128
-    TabOrder = 0
+    TabOrder = 2
     Text = 'COM9'
   end
   object Label13: TLabel
@@ -59,7 +59,7 @@ object frmSetup: TfrmSetup
       '460800'
       '921600'
     )
-    TabOrder = 1
+    TabOrder = 3
     Text = '9600'
   end
   object rgParity: TRadioGroup
@@ -86,7 +86,7 @@ object frmSetup: TfrmSetup
       'Mark'
       'Space'
     )
-    TabOrder = 2
+    TabOrder = 4
   end
   object cbDatabits: TRadioGroup
     Left = 7
@@ -111,7 +111,7 @@ object frmSetup: TfrmSetup
       '6bits'
       '5bits  '
     )
-    TabOrder = 3
+    TabOrder = 6
   end
   object rgFlowControl: TRadioGroup
     Left = 173
@@ -135,7 +135,7 @@ object frmSetup: TfrmSetup
       'XonXoff'
       'Hardware'
     )
-    TabOrder = 4
+    TabOrder = 5
   end
   object rgStopbit: TRadioGroup
     Left = 179
@@ -159,7 +159,7 @@ object frmSetup: TfrmSetup
       '1'
       '2'
     )
-    TabOrder = 5
+    TabOrder = 7
   end
   object Button1: TButton
     Left = 247
@@ -168,7 +168,7 @@ object frmSetup: TfrmSetup
     Width = 75
     Caption = 'Salvar'
     OnClick = Button1Click
-    TabOrder = 6
+    TabOrder = 9
   end
   object btCancelar: TButton
     Left = 167
@@ -177,7 +177,7 @@ object frmSetup: TfrmSetup
     Width = 75
     Caption = 'Cancelar'
     OnClick = btCancelarClick
-    TabOrder = 7
+    TabOrder = 8
   end
   object Label14: TLabel
     Left = 13
@@ -192,7 +192,23 @@ object frmSetup: TfrmSetup
     Height = 23
     Top = 19
     Width = 294
-    TabOrder = 8
+    TabOrder = 0
+    Text = '127.0.0.1'
+  end
+  object Label15: TLabel
+    Left = 12
+    Height = 15
+    Top = 48
+    Width = 52
+    Caption = 'PORT WP:'
+    ParentColor = False
+  end
+  object edPort: TEdit
+    Left = 10
+    Height = 23
+    Top = 61
+    Width = 110
+    TabOrder = 1
     Text = '127.0.0.1'
   end
 end

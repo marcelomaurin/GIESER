@@ -12,7 +12,7 @@ uses
   IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext, lHTTP, fphttpclient, httpprotocol;
 
 Const
-    Version : string =  '0.03';
+    Version : string =  '0.04';
 
 
 type
@@ -95,6 +95,7 @@ begin
   if (URL <> '') then
   begin
     lHTTP1 := TFPHttpClient.Create(nil);
+
     lData := TStringList.Create;
     try
       lHTTP1.AllowRedirect := True;
@@ -102,7 +103,6 @@ begin
       lData.Add('usvh=' + usvh);
       lData.Add('temp=' + temp);
       lData.Add('hum=' + hum);
-
       lResponse := lHTTP1.FormPost(url, lData);
 
       // Processar a resposta do servidor, se necessário
@@ -427,6 +427,7 @@ begin
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
   frmSetup.edURL.text := FSETMAIN.URL;
+  frmSetup.edPort.text := FSETMAIN.PORT;
   frmSetup.showmodal();
   frmsetup.free();
 end;

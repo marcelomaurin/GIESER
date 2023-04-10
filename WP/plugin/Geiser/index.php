@@ -88,7 +88,7 @@ function geiser_admin_menu() {
 add_action('rest_api_init', 'registrar_rota_personalizada');
 
 function registrar_rota_personalizada() {
-  register_rest_route('Geiser/v1', '/registro.php', [
+  register_rest_route('geiser/v1', '/registro.php', [
     'methods' => 'GET',
     'callback' => 'geiser_lst_callback',
   ]);
@@ -133,7 +133,7 @@ function geiser_lst_callback(WP_REST_Request $request) {
 
 
 function registrar_rota2_personalizada() {
-  register_rest_route('Geiser/v1', '/registro.php', [
+  register_rest_route('geiser/v1', '/registro.php', [
     'methods' => 'POST',
     'callback' => 'geiser_reg_callback',
   ]);

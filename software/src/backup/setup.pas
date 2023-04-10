@@ -19,9 +19,11 @@ type
     cbDatabits: TRadioGroup;
     edSerialPort: TEdit;
     edURL: TEdit;
+    edPort: TEdit;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
+    Label15: TLabel;
     rgFlowControl: TRadioGroup;
     rgParity: TRadioGroup;
     rgStopbit: TRadioGroup;
@@ -60,6 +62,7 @@ begin
   FSETMAIN.DATABIT := frmSetup.cbDatabits.ItemIndex;
   FSETMAIN.PARIDADE := frmSetup.rgParity.ItemIndex;
   FSETMAIN.URL := frmSetup.edURL.text;
+  FSETMAIN.PORT   := frmSetup.edPort.text;
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   FSETMAIN.STOPBIT := frmSetup.rgStopbit.ItemIndex;
   FSETMAIN.SalvaContexto();
