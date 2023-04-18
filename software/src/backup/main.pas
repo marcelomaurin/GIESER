@@ -136,7 +136,7 @@ begin
       lResponse := lHTTP1.FormPost(url, lData);
 
       // Processar a resposta do servidor, se necessário
-      // ShowMessage(lResponse);
+       ShowMessage(lResponse);
     finally
       lData.Free;
       lHTTP1.Free;
@@ -458,7 +458,7 @@ begin
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
   frmSetup.edURL.text := FSETMAIN.URL;
-  frmSetup.edPort.text := FSETMAIN.PORT;
+  //frmSetup.edPort.text := FSETMAIN.PORT;
   frmSetup.showmodal();
   frmsetup.free();
 end;

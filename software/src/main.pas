@@ -13,7 +13,7 @@ uses
   sslsockets, httpprotocol, opensslsockets;
 
 Const
-    Version : string =  '0.05';
+    Version : string =  '0.06';
 
 
 type
@@ -458,7 +458,7 @@ begin
   //frmSetup.rgFlowControl.ItemIndex:=FSETMAIN.;
   frmSetup.rgStopbit.ItemIndex := FSETMAIN.STOPBIT;
   frmSetup.edURL.text := FSETMAIN.URL;
-  frmSetup.edPort.text := FSETMAIN.PORT;
+  //frmSetup.edPort.text := FSETMAIN.PORT;
   frmSetup.showmodal();
   frmsetup.free();
 end;
