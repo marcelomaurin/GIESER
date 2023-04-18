@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "srvRAD"
-#define MyAppVersion "0.3"
+#define MyAppVersion "0.5"
 #define MyAppPublisher "MAURINSOFT"
 #define MyAppURL "http://maurinsoft.com.br"
 #define MyAppExeName "srvrad.exe"
@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=srvrad_setup_03
+OutputBaseFilename=srvrad_setup_05
 Compression=lzma
 SolidCompression=yes
 
@@ -57,7 +57,7 @@ TD_srvTemp=Install demo to srvrad
 
 
 [Files]
-Source: "C:\Users\marcelo.maurin\Documents\maurinsoft\GIESER\software\src\srvrad.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\projetos\maurinsoft\GIESER\software\src\srvrad.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 
 [Icons]
