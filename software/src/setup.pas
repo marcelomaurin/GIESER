@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  setmain;
+  setmain, funcoes;
 
 type
 
@@ -17,7 +17,7 @@ type
     btCancelar: TButton;
     cbBaudrate: TComboBox;
     cbDatabits: TRadioGroup;
-    edSerialPort: TEdit;
+    edSerialPort: TComboBox;
     edURL: TEdit;
     edPort: TEdit;
     Label12: TLabel;

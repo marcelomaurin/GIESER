@@ -8,11 +8,12 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   ExtCtrls, Menus, PopupNotifier, LazSerial, FileUtil, LazFileUtils, LazSynaSer,
   synaser, IdHTTPServer, lNetComponents, LedNumber, setmain, registro, peso,
-  setup, lNet, log, IdCustomHTTPServer,  IdCompressionIntercept,
-  IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext, lHTTP, fphttpclient, httpprotocol;
+  setup, lNet, log, IdCustomHTTPServer,  IdCompressionIntercept,  funcoes,
+  IdSSLOpenSSL, IdSchedulerOfThreadDefault,IdContext, lHTTP, fphttpclient,
+  sslsockets, httpprotocol, opensslsockets;
 
 Const
-    Version : string =  '0.04';
+    Version : string =  '0.05';
 
 
 type
@@ -85,7 +86,7 @@ implementation
 
 {$R *.lfm}
 
-
+(*
 procedure Tfrmmain.SendData(usvh: string; temp: string; hum: string; url: string);
 var
   lHTTP1: TFPHttpClient;
@@ -107,6 +108,35 @@ begin
 
       // Processar a resposta do servidor, se necessário
       // ShowMessage(lResponse);
+    finally
+      lData.Free;
+      lHTTP1.Free;
+    end;
+  end;
+end;
+*)
+
+procedure Tfrmmain.SendData(usvh: string; temp: string; hum: string; url: string);
+var
+  lHTTP1: TFPHttpClient;
+  lData: TStrings;
+  lResponse: String;
+begin
+  if (URL <> '') then
+  begin
+    lHTTP1 := TFPHttpClient.Create(nil);
+
+    lData := TStringList.Create;
+    try
+      lHTTP1.AllowRedirect := True;
+
+      lData.Add('usvh=' + usvh);
+      lData.Add('temp=' + temp);
+      lData.Add('hum=' + hum);
+      lResponse := lHTTP1.FormPost(url, lData);
+
+      // Processar a resposta do servidor, se necessário
+       ShowMessage(lResponse);
     finally
       lData.Free;
       lHTTP1.Free;
@@ -421,6 +451,7 @@ begin
  // frmSetup.edSerialPort.text := FSETMAIN.COMPORT;
   //192.168.0.105/wp-json/Geiser/v1/registro.php
   frmSetup.edSerialPort.text := FSETMAIN.COMPORT;
+  frmSetup.edSerialPort.Items := GetSerialPorts();
   frmSetup.cbBaudrate.ItemIndex:= FSETMAIN.BAUDRATE;
   frmSetup.cbDatabits.ItemIndex:= FSETMAIN.DATABIT;
   frmSetup.rgParity.ItemIndex:= FSETMAIN.PARIDADE;

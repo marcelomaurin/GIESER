@@ -10,7 +10,7 @@ uses
     baseunix, unixtype
   {$ENDIF}
 {$IFDEF WINDOWS}
-   WinSock
+   WinSock, windows , registry
 {$ENDIF}
   ;
 
@@ -19,8 +19,62 @@ function BuscaChave( lista : TStringList; Ref: String; var posicao:integer): boo
 function iif(condicao : boolean; verdade : variant; falso: variant):variant;
 function GetLocalIPAddress: string;
 function GetLocalMachineName: string;
+function GetSerialPorts(): TStringList;
 
 implementation
+
+
+
+
+function GetSerialPorts(): TStringList;
+{$IFDEF UNIX}
+var
+  Info: TSearchRec;
+{$ENDIF}
+{$IFDEF WINDOWS}
+var
+  Reg: TRegistry;
+  ValueNames: TStringList;
+  ValueName: string;
+  i: Integer;
+{$ENDIF}
+begin
+  Result := TStringList.Create;
+  {$IFDEF UNIX}
+  if FindFirst('/dev/ttyS*', faAnyFile and not faDirectory, Info) = 0 then
+  begin
+    repeat
+      Result.Add('/dev/' + Info.Name);
+    until FindNext(Info) <> 0;
+    FindClose(Info);
+  end;
+  {$ENDIF}
+  {$IFDEF WINDOWS}
+  Reg := TRegistry.Create;
+  try
+    Reg.RootKey := HKEY_LOCAL_MACHINE;
+    if Reg.OpenKeyReadOnly('HARDWARE\DEVICEMAP\SERIALCOMM') then
+    begin
+      ValueNames := TStringList.Create;
+      try
+        Reg.GetValueNames(ValueNames);
+        for i := 0 to ValueNames.Count - 1 do
+        begin
+          ValueName := ValueNames[i];
+          Result.Add(Reg.ReadString(ValueName));
+        end;
+      finally
+        ValueNames.Free;
+      end;
+      Reg.CloseKey;
+    end;
+  finally
+    Reg.Free;
+  end;
+  {$ENDIF}
+end;
+
+
 
 function GetLocalMachineName: string;
 var
