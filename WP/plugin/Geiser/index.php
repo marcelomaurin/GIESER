@@ -20,7 +20,7 @@ function criar_tabelas() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         nome varchar(50) NOT NULL,
         token varchar(50) NOT NULL,
-        status TINYINT(1) UNSIGNED  DEFAULT 1,
+        status TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
         PRIMARY KEY (id)
     ) $charset_collate;";
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -31,7 +31,7 @@ function criar_tabelas() {
     $sql2 = "CREATE TABLE $table_name2 (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         token varchar(50) NOT NULL,
-        lastdt timestamp  DEFAULT CURRENT_TIMESTAMP ,
+        lastdt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	usvh float NOT NULL,
 	temp float NOT NULL,
 	hum  float NOT NULL,
@@ -88,7 +88,7 @@ function geiser_admin_menu() {
 add_action('rest_api_init', 'registrar_rota_personalizada');
 
 function registrar_rota_personalizada() {
-  register_rest_route('geiser/v1', '/registro.php', [
+  register_rest_route('Geiser/v1', '/registro.php', [
     'methods' => 'GET',
     'callback' => 'geiser_lst_callback',
   ]);
@@ -133,7 +133,7 @@ function geiser_lst_callback(WP_REST_Request $request) {
 
 
 function registrar_rota2_personalizada() {
-  register_rest_route('geiser/v1', '/registro.php', [
+  register_rest_route('Geiser/v1', '/registro.php', [
     'methods' => 'POST',
     'callback' => 'geiser_reg_callback',
   ]);
@@ -270,182 +270,56 @@ function geiser_dispositivos_page() {
 
 function geiser_logs_page() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'geiser_logs';
 
-    // Configura a paginação
-    $per_page = 30;
-    $current_page = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
-    $offset = ($current_page - 1) * $per_page;
+    $table_name = $wpdb->prefix . "geiser_logs";
+    $logs = $wpdb->get_results("SELECT * FROM $table_name  order by lastdt desc");
 
-    // Busca os registros da tabela geiser_logs ordenados cronologicamente
-    $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY  lastdt DESC LIMIT %d OFFSET %d", $per_page, $offset), ARRAY_A);
+    echo '<h1>Demonstrativo de Armazenamento na Nuvem</h1>';
 
-    // Conta o total de registros na tabela geiser_logs
-    $total_logs = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
-
-    // Calcula o total de páginas
-    $total_pages = ceil($total_logs / $per_page);
-
-    // Iniciar a saída do HTML
-    ob_start();
-    ?>
-    <style>
-        .geiser-table {
-            border-collapse: collapse;
+    // Adicionar estilos CSS
+    echo '<style>
+        table.geiser-logs-table {
             width: 100%;
+            border-collapse: collapse;
         }
-        .geiser-table th, .geiser-table td {
-            border: 1px solid #ccc;
-            padding: 5px;
+        table.geiser-logs-table th,
+        table.geiser-logs-table td {
+            padding: 8px;
             text-align: left;
+            border: 1px solid #ccc;
         }
-        .geiser-table th {
+        table.geiser-logs-table thead {
             background-color: #f5f5f5;
             font-weight: bold;
         }
-    </style>
-    <script>
-        setTimeout(function() {
-            location.reload();
-        }, 5000);
-    </script>
-    <div class="wrap">
-        <h1>Geiser Logs</h1>
-        <table class="geiser-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Token</th>
-                    <th>Data/Hora</th>
-                    <th>usv/h</th>
-                    <th>Temperatura</th>
-                    <th>Humidade</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($logs as $log): ?>
-                    <tr>
-                        <td><?php echo intval($log['id']); ?></td>
-                        <td><?php echo intval($log['token']); ?></td>
-                        <td><?php echo esc_html($log['lastdt']); ?></td>
-                        <td><?php echo esc_html($log['usvh']); ?></td>
-                        <td><?php echo esc_html($log['temp']); ?></td>
-                        <td><?php echo esc_html($log['hum']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <div class="tablenav">
-            <div class="tablenav-pages">
-                <span class="displaying-num"><?php echo $total_logs; ?> itens</span>
-                <?php
-                echo paginate_links(array(
-                    'base' => add_query_arg('paged', '%#%'),
-                    'format' => '',
-                    'prev_text' => __('&laquo;'),
-                    'next_text' => __('&raquo;'),
-                    'total' => $total_pages,
-                    'current' => $current_page
-                ));
-                ?>
-            </div>
-        </div>
-    </div>
-    <?php
-    // Encerrar a saída do HTML
-    echo ob_get_clean();
+        table.geiser-logs-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>';
+
+    echo '<table class="geiser-logs-table">';
+    echo '<thead><tr><th>ID</th><th>Token</th><th>Data/Hora</th><th>USV/h</th><th>Temperatura</th><th>Umidade</th></tr></thead>';
+    echo '<tbody>';
+
+    foreach ($logs as $log) {
+        echo '<tr>';
+        echo '<td>' . $log->id . '</td>';
+        echo '<td>' . $log->token . '</td>';
+        echo '<td>' . $log->lastdt . '</td>';
+        echo '<td>' . $log->usvh . '</td>';
+        echo '<td>' . $log->temp . '</td>';
+        echo '<td>' . $log->hum . '</td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody>';
+    echo '</table>';
 }
 
 
+
 function geiser_analise_page() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'geiser_logs';
-
-    // Obtenha os dados do banco de dados
-    $logs = $wpdb->get_results("SELECT token, TIMESTAMP(lastdt) as datetime, AVG(usvh) as avg_usvh, AVG(temp) as avg_temp, AVG(hum) as avg_hum FROM $table_name GROUP BY token, UNIX_TIMESTAMP(lastdt) DIV (15 * 60) ORDER BY token, datetime", ARRAY_A);
-
-    // Iniciar a saída do HTML
-    ob_start();
-    ?>
-    <div class="wrap">
-        <h1>Geiser Análise</h1>
-        <div>
-            <canvas id="geiserChart"></canvas>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Organiza os dados para o gráfico
-                var logs = <?php echo json_encode($logs); ?>;
-                var tokens = [];
-                var data = {
-                    usvh: {},
-                    temp: {},
-                    hum: {}
-                };
-
-                logs.forEach(function (log) {
-                    if (!data.usvh.hasOwnProperty(log.token)) {
-                        data.usvh[log.token] = [];
-                        data.temp[log.token] = [];
-                        data.hum[log.token] = [];
-                    }
-                    data.usvh[log.token].push({x: log.datetime, y: parseFloat(log.avg_usvh)});
-                    data.temp[log.token].push({x: log.datetime, y: parseFloat(log.avg_temp)});
-                    data.hum[log.token].push({x: log.datetime, y: parseFloat(log.avg_hum)});
-                });
-
-                Object.keys(data.usvh).forEach(function (key) {
-                    tokens.push({
-                        label: 'Token ' + key + ' - usvh',
-                        data: data.usvh[key],
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    });
-                    tokens.push({
-                        label: 'Token ' + key + ' - temp',
-                        data: data.temp[key],
-                        fill: false,
-                        borderColor: 'rgb(255, 99, 132)',
-                        tension: 0.1
-                    });
-                    tokens.push({
-                        label: 'Token ' + key + ' - hum',
-                        data: data.hum[key],
-                        fill: false,
-                        borderColor: 'rgb(255, 205, 86)',
-                        tension: 0.1
-                    });
-                });
-
-                // Cria o gráfico
-                var ctx = document.getElementById('geiserChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: tokens
-                    },
-                    options: {
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'minute',
-                                    displayFormats: {
-                                        minute: 'HH:mm'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
-    </div>
-    <?php
-    // Encerrar a saída do HTML
-    echo ob_get_clean();
+  echo do_shortcode(' [gvn_schart_2 id="14" table="1"]'); 
 }
 
 
