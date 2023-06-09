@@ -10,7 +10,7 @@
 // Conversion factor - CPM to uSV/h
 #define CONV_FACTOR 0.0793
 #define PORT 80
-#define url "127.0.0.1"
+#define url "192.168.100.3"
 
 
 
@@ -39,8 +39,8 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192, 168, 0, 177);
-IPAddress myDns(192, 168, 0, 1);
+IPAddress ip(192, 168, 100, 177);
+IPAddress myDns(192, 168, 100, 1);
 
 // Initialize the Ethernet client library
 // with the IP address and port of the URL
