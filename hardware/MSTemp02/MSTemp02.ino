@@ -10,8 +10,9 @@
 // Conversion factor - CPM to uSV/h
 #define CONV_FACTOR 0.0793
 #define PORT 80
-#define url "192.168.100.3"
-
+//#define PORT 443
+//#define url "https://maurinsoft.com.br"
+#define url "192.168.100.5"
 
 
 const int GEIGER_COUNTER_PIN = 3;
@@ -45,7 +46,7 @@ IPAddress myDns(192, 168, 100, 1);
 // Initialize the Ethernet client library
 // with the IP address and port of the URL
 // that you want to connect to (port 80 is default for HTTP):
-EthernetClient client;
+//EthernetClient client;
 
 // Variables to measure the speed
 unsigned long beginMicros, endMicros;
@@ -158,29 +159,40 @@ void readGeiser()
 
 void WriteSite()
 {
+  // Cria uma instância do objeto EthernetClient para estabelecer a conexão
+  EthernetClient client;
   // give the Ethernet shield a second to initialize:
-  delay(1000);
+  //delay(1000);
   Serial.print("connecting to ");
   Serial.print(url);
   Serial.println("...");
-
+  //if (client.connect(server, httpsPort)) {
   // if you get a connection, report back via serial:
   if (client.connect(url, PORT)) {
     Serial.print("connected to ");
     Serial.println(client.remoteIP());
-
+/*
+    // Cabeçalho HTTP
+    client.println("POST /endpoint HTTP/1.1");
+    client.println("Host: api.exemplo.com");
+    client.println("Content-Type: application/json");
+    client.println("Connection: close");
+    client.print("Content-Length: ");
+    client.println(strlen(json));
+*/
     // Make a HTTP POST request:
-    client.println("POST /your_endpoint_here HTTP/1.1");
+    client.println("POST /wp-json/Geiser/v1/registro.php HTTP/1.1");
     client.print("Host: ");
     client.println(url);
     client.println("Content-Type: application/json");
+    client.println("Connection: close");
     client.print("usvh: ");
     client.println(usvh);
     client.print("temp: ");
     client.println(temperature);
     client.print("hum: ");
     client.println(humidity);
-    client.println("Connection: close");
+
 
     // Calculate the content length
     String jsonBody = String("{\"usvh\":") + String(usvh) + String(",\"temp\":") + String(temperature) + String(",\"hum\":") + String(humidity) + String("}");
