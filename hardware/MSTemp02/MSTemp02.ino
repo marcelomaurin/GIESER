@@ -12,7 +12,7 @@
 #define PORT 80
 //#define PORT 443
 //#define url "https://maurinsoft.com.br"
-#define url "192.168.100.5"
+#define url "192.168.100.5/wp-json/Geiser/v1/registro.php"
 
 
 const int GEIGER_COUNTER_PIN = 3;
@@ -162,7 +162,7 @@ void WriteSite()
   // Cria uma instância do objeto EthernetClient para estabelecer a conexão
   EthernetClient client;
   // give the Ethernet shield a second to initialize:
-  //delay(1000);
+  delay(1000);
   Serial.print("connecting to ");
   Serial.print(url);
   Serial.println("...");
@@ -202,11 +202,13 @@ void WriteSite()
     client.println(); // Required empty line before the body
     client.print(jsonBody);
     client.println();
+    client.stop();
   } else {
     // if you didn't get a connection to the server:
     Serial.println("connection failed");
   }
   beginMicros = micros();
+ 
 }
 
 
