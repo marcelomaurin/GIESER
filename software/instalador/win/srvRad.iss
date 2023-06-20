@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=srvrad_setup_05
+OutputBaseFilename=srvgeiser_setup_10
 Compression=lzma
 SolidCompression=yes
 
@@ -35,15 +35,15 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 
 [Types]
-Name: "srvrad"; Description: {cm:T_srvTemp}
+Name: "srvgeiser"; Description: {cm:T_srvTemp}
 
 [Components]
-Name: "srvrad"; Description: "Arquivos do srvrad"; Types: srvrad;
+Name: "srvgeiser"; Description: "Arquivos do srvgeiser"; Types: srvgeiser;
 
 
 [CustomMessages]
-T_srvTemp=srvrad
-TD_srvTemp=Install demo to srvrad
+T_srvTemp=srvgeiser
+TD_srvTemp=Install demo to srvgeiser
 
 ; [Setup], [Files] etc sections go here
 [Code]
@@ -57,7 +57,7 @@ TD_srvTemp=Install demo to srvrad
 
 
 [Files]
-Source: "D:\projetos\maurinsoft\GIESER\software\src\srvrad.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\projetos\maurinsoft\GIESER\software\src\srvGeiser.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 
 [Icons]
